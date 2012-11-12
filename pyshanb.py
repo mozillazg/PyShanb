@@ -54,7 +54,7 @@ def login(url_login, headers, username, password):
 def get_word(api, headers, cookies, word):
     """获取单词信息
     """
-    ur_get = api + word
+    ur_get = api % (word)
     r_get = requests.get(ur_get, headers=headers,
                          cookies=cookies, prefetch=False)
     if r_get.status_code != requests.codes.ok:
@@ -69,7 +69,7 @@ def get_word(api, headers, cookies, word):
 def add_word(api, headers, cookies, word):
     """收藏单词
     """
-    url_add = api + word
+    url_add = api % (word)
     r_add = requests.get(url_add, headers=headers, cookies=cookies,
                          prefetch=False)
     if r_add.status_code != requests.codes.ok:
@@ -81,7 +81,7 @@ def add_word(api, headers, cookies, word):
 
 
 def get_example(api, headers, cookies, learning_id):
-    url_example = api + str(learning_id)
+    url_example = api % (str(learning_id))
     r_example = requests.get(url_example, headers=headers,
                              cookies=cookies, prefetch=False)
     if r_example.status_code != requests.codes.ok:
@@ -99,11 +99,11 @@ def download_audio(url_audio, headers, cookies):
     """下载音频文件
     返回文件内容
     """
-    d_headers = copy.deepcopy(headers)
-    d_headers.update({
-        'Host': 'media.shanbay.com',
+    headers_d = copy.deepcopy(headers)
+    headers_d.update({
+        'Host': urlparse.urlsplit(url_audio).netloc,
     })
-    r_audio = requests.get(url_audio, headers=d_headers, cookies=cookies,
+    r_audio = requests.get(url_audio, headers=headers_d, cookies=cookies,
                            prefetch=False)
     if r_audio.status_code != requests.codes.ok:
         # raise r_audio.raise_for_status()
@@ -112,6 +112,17 @@ def download_audio(url_audio, headers, cookies):
         return r_audio.content
 
 
+# 使用装饰器（decorator）处理异常
+def check_error(func):
+    def check(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except requests.exceptions.RequestException:
+            print u"Network trouble!"
+    return check
+
+
+@check_error
 def main():
     """docstring for main"""
     from urllib2 import quote
@@ -125,26 +136,29 @@ def main():
         # raise Exception("Sorry, this program can't run on your\
                         # operating system.")
     site = 'http://www.shanbay.com'
+    username = 'username'
+    username = 'mozillazg'
+    password = 'password'
+    password = 'mXB=_Y^zk8E$/w_$4zwX'
+    auto_play = True
+    auto_add = False
+    ask_add = True
+    enable_en_definition = True
+    enable_example = True
+    url_login = site + '/accounts/login/'
+    api_get_word = site + '/api/word/%s'
+    api_get_example = site + '/api/learning/examples/%s'
+    api_add_word = site + '/api/learning/add/%s'
     headers = {
         'Host': urlparse.urlsplit(site).netloc,
         'User-Agent': ('Mozilla/5.0 (Windows NT 6.2; rv:15.0) Gecko'
                        + '/20100101 Firefox/15.0.1'),
     }
-    username = 'username'
-    password = 'password'
-    auto_play = True
-    auto_add = True
-    enable_en_definition = False
-    enable_example = False
-    url_login = site + '/accounts/login/'
-    api_get_word = site + '/api/word/'
-    api_get_example = site + '/api/learning/examples/'
-    api_add_word = site + '/api/learning/add/'
     # 登录
     cookies = login(url_login, headers, username, password)
     if cookies:
         while True:
-            word = quote(raw_input('please input the word: ').strip())
+            word = quote(raw_input('Please input a word: ').strip())
             if not word:
                 continue
             # 获取单词信息
@@ -166,13 +180,31 @@ def main():
                                                           ).iteritems()]
                 # 中文解释
                 word_definition = voc.get(u'definition')
+                print u'-' * 50
+                # print u'%s [%s]' % (word_content, word_pron)
+                print u'%s' % (word_content)
+                print u'%s' % (word_definition)
+                if enable_en_definition and word_en_definition:
+                    for en in word_en_definition:
+                        print u'%s' % (en)
                 word_examples = list()
-                if auto_add:
+                if auto_add or ask_add:
                     # 如果未收藏该单词
                     if word_leaning_id == 0:
-                        # 收藏单词
-                        word_leaning_id = add_word(api_add_word, headers,
-                                                   cookies, word)[u'id']
+                        if ask_add:
+                            ask = raw_input("Do you want add the word(" +
+                                            "'%s')to shanbay.com(y/n)? "
+                                            % (word_content)).strip().lower()
+                            if ask.startswith('y'):
+                                # 收藏单词
+                                word_leaning_id = add_word(api_add_word,
+                                                           headers, cookies,
+                                                           word)[u'id']
+                        else:
+                            word_leaning_id = add_word(api_add_word,
+                                                       headers, cookies,
+                                                       word)[u'id']
+
                 # 例句
                 if enable_example and word_leaning_id != 0:
                     word_example = get_example(api_get_example, headers,
@@ -180,16 +212,9 @@ def main():
                     if word_example:
                         examples = word_example.get(u'examples')
                         for example in examples:
-                            word_examples.append('%(first)s_%(mid)s_%(last)s\n\
-                                                 %(translation)s' %
-                                                 (example))
-                print '-' * 50
-                # print u'%s [%s]' % (word_content, word_pron)
-                print u'%s' % (word_content)
-                print u'%s' % (word_definition)
-                if enable_en_definition and word_en_definition:
-                    for en in word_en_definition:
-                        print u'%s' % (en)
+                            word_examples.append('%(first)s_%(mid)s_%(last)s' +
+                                                 '\n%(translation)s'
+                                                 % (example))
                 if enable_example and word_examples:
                     for ex in word_examples:
                         print u'%s' % (ex)
@@ -209,9 +234,9 @@ def main():
                    # 移除临时文件
                     os.remove(temp_file)
                     # print os.path.exists(temp_file)
-                print '-' * 50
+                print u'-' * 50
     else:
-        print 'Login failed'
+        print u'Login failed!'
 
 if __name__ == '__main__':
     main()

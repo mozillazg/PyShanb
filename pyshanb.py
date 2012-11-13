@@ -119,46 +119,50 @@ def check_error(func):
             return func(*args, **kwargs)
         except requests.exceptions.RequestException:
             print u"Network trouble!"
+            exit(0)
     return check
 
 
 @check_error
 def main():
     """docstring for main"""
+    import sys
+    if sys.version_info[0] == 3:
+        print u"Sorry, this program doesn't support Python 3 yet"
+        exit(0)
+
     from urllib2 import quote
     import tempfile
     import os
     import time
+    import conf
 
-    if os.name == 'nt':
+
+    site = conf.site
+    username = conf.username
+    password = conf.password
+    auto_play = conf.auto_play
+    if auto_play and os.name == 'nt':
         import mp3play
-    # else:
-        # raise Exception("Sorry, this program can't run on your\
-                        # operating system.")
-    site = 'http://www.shanbay.com'
-    username = 'username'
-    username = 'mozillazg'
-    password = 'password'
-    password = 'mXB=_Y^zk8E$/w_$4zwX'
-    auto_play = True
-    auto_add = False
-    ask_add = True
-    enable_en_definition = True
-    enable_example = True
-    url_login = site + '/accounts/login/'
-    api_get_word = site + '/api/word/%s'
-    api_get_example = site + '/api/learning/examples/%s'
-    api_add_word = site + '/api/learning/add/%s'
+    auto_add = conf.auto_add
+    ask_add = conf.ask_add
+    enable_en_definition = conf.enable_en_definition
+    enable_example = conf.enable_example
+    url_login = site + conf.url_login
+    api_get_word = site + conf.api_get_word
+    api_get_example = site + conf.api_get_example
+    api_add_word = site + conf.api_add_word
     headers = {
         'Host': urlparse.urlsplit(site).netloc,
         'User-Agent': ('Mozilla/5.0 (Windows NT 6.2; rv:15.0) Gecko'
                        + '/20100101 Firefox/15.0.1'),
     }
     # 登录
+    print 'Login...'
     cookies = login(url_login, headers, username, password)
     if cookies:
         while True:
-            word = quote(raw_input('Please input a word: ').strip())
+            word = quote(raw_input('Please input a english word: ').strip())
             if not word:
                 continue
             # 获取单词信息
@@ -168,6 +172,9 @@ def main():
                 # 学习记录
                 word_leaning_id = result_get[u'learning_id']
                 voc = result_get.get(u'voc')
+                if not voc:
+                    print u"'%s' may not be a english word!" % word
+                    continue
                 # 单词本身
                 word_content = voc.get(u'content')
                 # 音标
@@ -180,7 +187,7 @@ def main():
                                                           ).iteritems()]
                 # 中文解释
                 word_definition = voc.get(u'definition')
-                print u'-' * 50
+                print u'-' * 55
                 # print u'%s [%s]' % (word_content, word_pron)
                 print u'%s' % (word_content)
                 print u'%s' % (word_definition)
@@ -188,12 +195,28 @@ def main():
                     for en in word_en_definition:
                         print u'%s' % (en)
                 word_examples = list()
+                if auto_play and os.name == 'nt':
+                    # 临时保存音频文件
+                    file_name = (str(time.time()) +
+                                 os.path.splitext(word_audio)[1] or '.mp3')
+                    temp_file = os.path.realpath(tempfile.gettempdir() +
+                                                 file_name)
+                    # print temp_file
+                    audio = download_audio(word_audio, headers, cookies)
+                    with open(temp_file, 'wb') as f:
+                        f.write(audio)
+                    # 播放单词读音
+                    mp3 = mp3play.load(temp_file)
+                    mp3.play()
+                   # 移除临时文件
+                    os.remove(temp_file)
+                    # print os.path.exists(temp_file)
                 if auto_add or ask_add:
                     # 如果未收藏该单词
                     if word_leaning_id == 0:
                         if ask_add:
-                            ask = raw_input("Do you want add the word(" +
-                                            "'%s')to shanbay.com(y/n)? "
+                            ask = raw_input('Do you want add ' +
+                                            '"%s" to shanbay.com? (y/n): '
                                             % (word_content)).strip().lower()
                             if ask.startswith('y'):
                                 # 收藏单词
@@ -218,23 +241,7 @@ def main():
                 if enable_example and word_examples:
                     for ex in word_examples:
                         print u'%s' % (ex)
-                if auto_play and os.name == 'nt':
-                    # 临时保存音频文件
-                    file_name = (str(time.time()) +
-                                 os.path.splitext(word_audio)[1] or '.mp3')
-                    temp_file = os.path.realpath(tempfile.gettempdir() +
-                                                 file_name)
-                    # print temp_file
-                    audio = download_audio(word_audio, headers, cookies)
-                    with open(temp_file, 'wb') as f:
-                        f.write(audio)
-                    # 播放单词读音
-                    mp3 = mp3play.load(temp_file)
-                    mp3.play()
-                   # 移除临时文件
-                    os.remove(temp_file)
-                    # print os.path.exists(temp_file)
-                print u'-' * 50
+                print u'-' * 55
     else:
         print u'Login failed!'
 

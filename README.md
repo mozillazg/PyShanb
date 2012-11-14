@@ -1,12 +1,18 @@
 # 命令行下的扇贝网查词工具
 
-基于[扇贝网 API v0.8](http://www.shanbay.com/support/dev/api.html "扇贝网 API v0.8")
+基于[扇贝网 API v0.8](http://www.shanbay.com/support/dev/api.html "扇贝网 API v0.8")开发的一个命令行下的查词工具。支持将生词添加到扇贝网的个人词库中。
 
 ## 依赖
 
 * [python 2.6 or 2.7](http://www.python.org/ "www.python.org")
 * [requests](https://github.com/kennethreitz/requests "requests-github")
 * [mp3play(windows only)](https://code.google.com/p/mp3play/ "mp3play-url")
+
+## 使用
+
+1. 安装依赖模块：`pip install -r requirements.txt`。
+2. 配置用户名及密码（pyshanb.conf）。
+3. 命令行下执行：`python pyshanb.py`（Tips：使用过程中输入 `q` 即可退出程序）。
 
 ## 功能
 
@@ -18,6 +24,7 @@
 * 询问是否添加单词到扇贝网词库（可选，默认启用）
 * 显示例句（显示用户在扇贝网添加的例句）（可选，默认禁用）
 * 配置文件（配置用户名、密码及其他功能项）
+
 
 ## 已知问题
 

@@ -64,6 +64,7 @@ def get_word(api, headers, cookies, word):
                          cookies=cookies, prefetch=False)
     if r_get.status_code != requests.codes.ok:
         return None
+
     new_cookies = r_get.cookies.get_dict()
     # 如果网站 cookies 信息发生了变化，更新 cookies
     if new_cookies:
@@ -79,6 +80,7 @@ def add_word(api, headers, cookies, word):
                          prefetch=False)
     if r_add.status_code != requests.codes.ok:
         return None
+
     new_cookies = r_add.cookies.get_dict()
     if new_cookies:
         cookies.update(new_cookies)
@@ -86,15 +88,19 @@ def add_word(api, headers, cookies, word):
 
 
 def get_example(api, headers, cookies, learning_id):
+    """获取用户在扇贝网添加的例句
+    """
     url_example = api % (str(learning_id))
     r_example = requests.get(url_example, headers=headers,
                              cookies=cookies, prefetch=False)
     if r_example.status_code != requests.codes.ok:
         return None
+
     example_json = r_example.json
     # 判断是否包含例句信息
     if example_json.get('examples_status') != 1:
         return None
+
     new_cookies = r_example.cookies.get_dict()
     if new_cookies:
         cookies.update(new_cookies)
@@ -159,6 +165,7 @@ def main():
     api_get_word = site + conf.api_get_word  # 获取单词信息的 api
     api_get_example = site + conf.api_get_example  # 获取例句的 api
     api_add_word = site + conf.api_add_word  # 保存单词的 api
+    cmd_width = 55
 
     headers = {
         'Host': urlparse.urlsplit(site).netloc,
@@ -169,96 +176,109 @@ def main():
     # 登录
     print 'Login...'
     cookies = login(url_login, headers, username, password)
-
-    if cookies:
-        while True:
-            word = quote(raw_input('Please input a english word: ').strip())
-            if not word:
-                continue
-            # 获取单词信息
-            result_get = get_word(api_get_word, headers, cookies, word)
-
-            if result_get:
-                # 输出单词信息
-                # 学习记录
-                word_leaning_id = result_get[u'learning_id']
-                voc = result_get.get(u'voc')
-                if not voc:
-                    print u"'%s' may not be a english word!" % word
-                    continue
-                # 单词本身
-                word_content = voc.get(u'content')
-                # 音标
-                # word_pron = voc.get(u'pron')
-                # 音频文件
-                word_audio = voc.get(u'audio')
-                # 英文解释
-                word_en_definition = [u'%s. %s' % (p, ','.join(d))
-                                      for p, d in voc.get(u'en_definitions'
-                                                          ).iteritems()]
-                # 中文解释
-                word_definition = voc.get(u'definition')
-
-                print u'-' * 55
-                # print u'%s [%s]' % (word_content, word_pron)
-                print u'%s' % (word_content)
-                print u'%s' % (word_definition)
-                if enable_en_definition and word_en_definition:
-                    for en in word_en_definition:
-                        print u'%s' % (en)
-
-                if auto_play and os.name == 'nt':
-                    # 临时保存音频文件
-                    file_name = (str(time.time()) +
-                                 os.path.splitext(word_audio)[1] or '.mp3')
-                    temp_file = os.path.realpath(tempfile.gettempdir() +
-                                                 file_name)
-                    # print temp_file
-                    audio = download_audio(word_audio, headers, cookies)
-                    with open(temp_file, 'wb') as f:
-                        f.write(audio)
-                    # 播放单词读音
-                    mp3 = mp3play.load(temp_file)
-                    mp3.play()
-                   # 移除临时文件
-                    os.remove(temp_file)
-                    # print os.path.exists(temp_file)
-
-                if auto_add or ask_add:
-                    # 如果未收藏该单词
-                    if word_leaning_id == 0:
-                        if ask_add:
-                            ask = raw_input('Do you want add ' +
-                                            '"%s" to shanbay.com? (y/n): '
-                                            % (word_content)).strip().lower()
-                            if ask.startswith('y'):
-                                # 收藏单词
-                                word_leaning_id = add_word(api_add_word,
-                                                           headers, cookies,
-                                                           word)[u'id']
-                        else:
-                            word_leaning_id = add_word(api_add_word,
-                                                       headers, cookies,
-                                                       word)[u'id']
-
-                # 例句
-                word_examples = list()
-                if enable_example and word_leaning_id != 0:
-                    word_example = get_example(api_get_example, headers,
-                                               cookies, word_leaning_id)
-                    if word_example:
-                        examples = word_example.get(u'examples')
-                        for example in examples:
-                            word_examples.append('%(first)s_%(mid)s_%(last)s' +
-                                                 '\n%(translation)s'
-                                                 % (example))
-                if enable_example and word_examples:
-                    for ex in word_examples:
-                        print u'%s' % (ex)
-
-                print u'-' * 55
-    else:
+    if not cookies:
         print u'Login failed!'
+        exit(0)
+
+    while True:
+        word = quote(raw_input(u'Please input a english word: ').strip())
+        if not word:
+            continue
+
+        # 输入 q 退出程序
+        if word == u'q':
+            print u'Goodbye.'
+            exit(0)
+            # break
+
+        # 获取单词信息
+        result_get = get_word(api_get_word, headers, cookies, word)
+        if not result_get:
+            continue
+
+        # 输出单词信息
+        # 学习记录
+        word_leaning_id = result_get[u'learning_id']
+        voc = result_get.get(u'voc')
+        if not voc:
+            print u"'%s' may not be a english word!" % word
+            continue
+        # 单词本身
+        word_content = voc.get(u'content')
+        # 音标
+        # word_pron = voc.get(u'pron')
+        # 音频文件
+        word_audio = voc.get(u'audio')
+        # 英文解释
+        word_en_definition = [u'%s. %s' % (p, ','.join(d))
+                              for p, d in voc.get(u'en_definitions'
+                                                  ).iteritems()]
+        # 中文解释
+        word_definition = voc.get(u'definition')
+
+        # print u'%s [%s]' % (word_content, word_pron)
+        print u'%s' % (word_content)
+        print u'-' * cmd_width
+        print u'%s' % (word_definition)
+
+        if enable_en_definition and word_en_definition:
+            print u'\nEnglish definition:'
+            for en in word_en_definition:
+                print u'%s' % (en)
+        try:
+            if auto_play and os.name == 'nt':
+                # 临时保存音频文件
+                file_name = (str(time.time()) +
+                             os.path.splitext(word_audio)[1] or '.mp3')
+                temp_file = os.path.realpath(tempfile.gettempdir() +
+                                             file_name)
+                # print temp_file
+                audio = download_audio(word_audio, headers, cookies)
+                with open(temp_file, 'wb') as f:
+                    f.write(audio)
+                # 播放单词读音
+                mp3 = mp3play.load(temp_file)
+                mp3.play()
+               # 移除临时文件
+                os.remove(temp_file)
+                # print os.path.exists(temp_file)
+        except:
+            pass
+
+        if auto_add or ask_add:
+            # 如果未收藏该单词
+            if word_leaning_id == 0:
+                if ask_add:
+                    ask = raw_input('Do you want add ' +
+                                    '"%s" to shanbay.com? (y/n): '
+                                    % (word_content)).strip().lower()
+                    if ask.startswith('y'):
+                        # 收藏单词
+                        word_leaning_id = add_word(api_add_word,
+                                                   headers, cookies,
+                                                   word)[u'id']
+                else:
+                    word_leaning_id = add_word(api_add_word,
+                                               headers, cookies,
+                                               word)[u'id']
+
+        # 例句
+        word_examples = list()
+        if enable_example and word_leaning_id != 0:
+            word_example = get_example(api_get_example, headers,
+                                       cookies, word_leaning_id)
+            if word_example:
+                examples = word_example.get(u'examples')
+                for example in examples:
+                    word_examples.append('%(first)s*%(mid)s*%(last)s'
+                                         % (example) +
+                                         '\n%(translation)s' % (example))
+        if enable_example and word_examples:
+            print u'\nExamples:'
+            for ex in word_examples:
+                print u'%s' % (ex)
+
+        print u'-' * cmd_width
 
 if __name__ == '__main__':
     main()

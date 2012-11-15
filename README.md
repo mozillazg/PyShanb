@@ -2,7 +2,7 @@
 
 基于[扇贝网 API v0.8](http://www.shanbay.com/support/dev/api.html "扇贝网 API v0.8")开发的一个命令行下的查词工具。支持将生词添加到扇贝网的个人词库中。
 
-![截图-默认功能](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-01.png"截图-默认功能")
+![截图-默认功能](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-01.png "截图-默认功能")
 
 ## 功能
 
@@ -30,7 +30,7 @@
 ## 截图
 
 默认：       
-![截图-默认功能](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-01.png"截图-默认功能")
+![截图-默认功能](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-01.png "截图-默认功能")
 
 火力全开：      
 ![截图-功能全开](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-02.png "截图-功能全开")

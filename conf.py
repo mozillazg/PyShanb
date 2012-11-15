@@ -51,7 +51,7 @@ if not (username and password):
     print u'by config file(%s)' % (CONFIGFILE)
     exit(0)
 # 其他非必需项。如果未配置相关选项则使用默认值
-auto_play = get_option_value(config.getboolean, 'General', 'auto_play', True)
+auto_play = get_option_value(config.getboolean, 'General', 'auto_play', False)
 auto_add = get_option_value(config.getboolean, 'General', 'auto_add', False)
 ask_add = get_option_value(config.getboolean, 'General', 'ask_add', True)
 

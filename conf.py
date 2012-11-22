@@ -3,6 +3,7 @@
 
 import ConfigParser
 import os
+import sys
 
 
 # 设置默认配置
@@ -15,6 +16,7 @@ def default_config(configs, configfile):
     configs.set('General', 'ask_add', '1')
     configs.set('General', 'enable_en_definition', '0')
     configs.set('General', 'enable_example', '0')
+
     with open(configfile, 'wb') as config_file:
         configs.write(config_file)
 
@@ -33,6 +35,7 @@ config = ConfigParser.RawConfigParser()
 
 # 读取配置文件。
 config.read(CONFIGFILE)
+
 # 如果没有配置文件或没有用户名及密码的配置项
 # 则创建默认配置文件
 if not (os.path.isfile(CONFIGFILE)
@@ -47,9 +50,9 @@ if not (os.path.isfile(CONFIGFILE)
 username = config.get('General', 'username')
 password = config.get('General', 'password')
 if not (username and password):
-    print u'Please configure your username and password',
-    print u'by config file(%s)' % (CONFIGFILE)
-    exit(0)
+    a = u'Please configure your username and password'
+    sys.exit(a + u'by config file(%s)' % (CONFIGFILE))
+
 # 其他非必需项。如果未配置相关选项则使用默认值
 auto_play = get_option_value(config.getboolean, 'General', 'auto_play', False)
 auto_add = get_option_value(config.getboolean, 'General', 'auto_add', False)

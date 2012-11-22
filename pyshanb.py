@@ -4,6 +4,7 @@
 """在命令行下使用扇贝网查询单词
 """
 
+import sys
 import requests
 import urlparse
 import copy
@@ -130,8 +131,7 @@ def check_error(func):
         try:
             return func(*args, **kwargs)
         except requests.exceptions.RequestException:
-            print u"Network trouble!"
-            exit(0)
+            sys.exit(u"Network trouble!")
     return check
 
 
@@ -140,8 +140,7 @@ def main():
     import sys
 
     if sys.version_info[0] == 3:
-        print u"Sorry, this program doesn't support Python 3 yet"
-        exit(0)
+        sys.exit(u"Sorry, this program doesn't support Python 3 yet")
 
     from urllib2 import quote
     import tempfile
@@ -177,8 +176,7 @@ def main():
     print 'Login...'
     cookies = login(url_login, headers, username, password)
     if not cookies:
-        print u'Login failed!'
-        exit(0)
+        sys.exit(u'Login failed!')
 
     while True:
         word = quote(raw_input(u'Please input a english word: ').strip())
@@ -188,8 +186,7 @@ def main():
         # 输入 q 退出程序
         if word == u'q':
             print u'Goodbye.'
-            exit(0)
-            # break
+            sys.exit(0)
 
         # 获取单词信息
         result_get = get_word(api_get_word, headers, cookies, word)

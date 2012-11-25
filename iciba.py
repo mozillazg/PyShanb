@@ -28,7 +28,7 @@ class Lciba(object):
         query_api = api or self.query_api
         query_url = query_api % word
         query_headers = copy.deepcopy(self.headers)
-        if self.headers:
+        if query_headers:
             query_headers.update({
                 'Host': urlparse.urlsplit(query_url).netloc,
             })
@@ -36,9 +36,7 @@ class Lciba(object):
         query_r = requests.get(query_url, headers=query_headers,
                                prefetch=False)
         if query_r.status_code == requests.codes.ok:
-            query_content = query_r.content
-            self.content = query_content
-            return self.content
+            return query_r.text
         else:
             return None
 
@@ -125,15 +123,17 @@ class Lciba(object):
             return None
 
         re_li = re.compile(ur'<li>(\S+)\s*<a\s*[^>]+>\W*(\w+)\W*</a>\s*</li>')
-        lis = re_li.findall(div)
+        lis = re_li.findall(div[0])
         if not lis:
             return None
         result = ''
         for a, b in lis:
-            result += a + b
+            result += a + b + ' '
         return result
 
 if __name__ == '__main__':
-    iciba = Lciba()
-    for i in iciba.get_data('word'):
+    headers = {'User-Agent': ('Mozilla/5.0 (Windows NT 6.2; rv:17.0)'
+               + 'Gecko/17.0 Firefox/17.0')}
+    iciba = Lciba(headers, True, 'en-US', True, True)
+    for i in iciba.get_data('simple'):
         print i

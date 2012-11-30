@@ -18,7 +18,12 @@ def default_config(configs, configfile):
     configs.set('General', 'enable_example', '0')
 
     configs.add_section('iciba')
-    configs.set('iciba', 'enable iciba', '0')
+    configs.set('iciba', 'enabled', '0')
+    configs.set('iciba', 'enable_audio', '1')
+    configs.set('iciba', 'lang', 'en-US')
+    configs.set('iciba', 'enable_syllable', '1')
+    configs.set('iciba', 'enable_definition', '1')
+    configs.set('iciba', 'enable_extra', '1')
 
 
     with open(configfile, 'wb') as config_file:
@@ -68,11 +73,16 @@ enable_example = get_option_value(config.getboolean, 'General',
                                   'enable_example', False)
 
 # iciba
-enable_iciba = True  # get_option_value(config.getboolean, enable_iciba
-enable_icb_audio = True  # conf.iciba_audio
-enable_icb_lang = 'en-US'  # conf.iciba_lang
-enable_icb_syllable = True  # conf.iciba_syllable
-enable_icb_extra = True  # conf.iciba_syllable
+enable_iciba = get_option_value(config.getboolean, 'iciba', 'enabled', False)
+enable_icb_audio = get_option_value(config.getboolean,
+                                    'iciba', 'enable_audio', True)
+enable_icb_lang = get_option_value(config.get, 'iciba', 'lang', 'en-US')
+enable_icb_syllable = get_option_value(config.getboolean, 'iciba',
+                                       'enable_syllable', True)
+enable_icb_definition = get_option_value(config.getboolean, 'iciba',
+                                         'enable_definition', True)
+enable_icb_extra = get_option_value(config.getboolean,'iciba',
+                                    'enable_extra', True)
 
 #
 site = 'http://www.shanbay.com'
@@ -94,7 +104,8 @@ if __name__ == '__main__':
     print 'api_add_word:', api_add_word
     print 'api_get_example:', api_get_example
     print 'enable_iciba:', enable_iciba
-    print 'iciba_audio:', iciba_audio
-    print 'iciba_lang:', iciba_lang
-    print 'iciba_syllable:', iciba_syllable
-    print 'iciba_extra:', iciba_extra
+    print 'enable_icb_audio:', enable_icb_audio
+    print 'enable_icb_lang:', enable_icb_lang
+    print 'enable_icb_syllable:', enable_icb_syllable
+    print 'enable_icb_definition:', enable_icb_definition
+    print 'enable_icb_extra:', enable_icb_extra

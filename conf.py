@@ -17,6 +17,10 @@ def default_config(configs, configfile):
     configs.set('General', 'enable_en_definition', '0')
     configs.set('General', 'enable_example', '0')
 
+    configs.add_section('iciba')
+    configs.set('iciba', 'enable iciba', '0')
+
+
     with open(configfile, 'wb') as config_file:
         configs.write(config_file)
 
@@ -62,6 +66,14 @@ enable_en_definition = get_option_value(config.getboolean, 'General',
                                         'enable_en_definition', False)
 enable_example = get_option_value(config.getboolean, 'General',
                                   'enable_example', False)
+
+# iciba
+enable_iciba = True  # get_option_value(config.getboolean, enable_iciba
+enable_icb_audio = True  # conf.iciba_audio
+enable_icb_lang = 'en-US'  # conf.iciba_lang
+enable_icb_syllable = True  # conf.iciba_syllable
+enable_icb_extra = True  # conf.iciba_syllable
+
 #
 site = 'http://www.shanbay.com'
 url_login = '/accounts/login/'
@@ -81,3 +93,8 @@ if __name__ == '__main__':
     print 'api_get_word:', api_get_word
     print 'api_add_word:', api_add_word
     print 'api_get_example:', api_get_example
+    print 'enable_iciba:', enable_iciba
+    print 'iciba_audio:', iciba_audio
+    print 'iciba_lang:', iciba_lang
+    print 'iciba_syllable:', iciba_syllable
+    print 'iciba_extra:', iciba_extra

@@ -4,6 +4,7 @@
 """在命令行下使用扇贝网查询单词
 """
 
+import sys
 import requests
 import urlparse
 import copy
@@ -107,13 +108,14 @@ def get_example(api, headers, cookies, learning_id):
     return example_json
 
 
-def download_audio(url_audio, headers, cookies):
+def download_audio(url_audio, headers, cookies=None, refere=None):
     """下载音频文件
     返回文件内容
     """
     headers_d = copy.deepcopy(headers)
     headers_d.update({
         'Host': urlparse.urlsplit(url_audio).netloc,
+        'Refere': refere,
     })
     r_audio = requests.get(url_audio, headers=headers_d, cookies=cookies,
                            prefetch=False)
@@ -130,8 +132,7 @@ def check_error(func):
         try:
             return func(*args, **kwargs)
         except requests.exceptions.RequestException:
-            print u"Network trouble!"
-            exit(0)
+            sys.exit(u"Network trouble!")
     return check
 
 
@@ -140,8 +141,7 @@ def main():
     import sys
 
     if sys.version_info[0] == 3:
-        print u"Sorry, this program doesn't support Python 3 yet"
-        exit(0)
+        sys.exit(u"Sorry, this program doesn't support Python 3 yet")
 
     from urllib2 import quote
     import tempfile
@@ -153,7 +153,6 @@ def main():
     username = conf.username
     password = conf.password
     auto_play = conf.auto_play  # 自动播放单词读音
-
     if auto_play and os.name == 'nt':
         import mp3play
 
@@ -161,10 +160,21 @@ def main():
     ask_add = conf.ask_add  # 询问是否保存单词
     enable_en_definition = conf.enable_en_definition  # 单词英文释义
     enable_example = conf.enable_example  # 用户自己添加的单词例句
+
+    # iciba
+    enable_iciba = conf.enable_iciba
+    enable_icb_audio = conf.enable_icb_audio
+    enable_icb_lang = conf.enable_icb_lang
+    enable_icb_syllable = conf.enable_icb_syllable
+    enable_icb_extra = conf.enable_icb_syllable
+    if enable_iciba:
+        from iciba import Lciba as iciba
+
     url_login = site + conf.url_login
     api_get_word = site + conf.api_get_word  # 获取单词信息的 api
     api_get_example = site + conf.api_get_example  # 获取例句的 api
     api_add_word = site + conf.api_add_word  # 保存单词的 api
+
     cmd_width = 55
 
     headers = {
@@ -177,8 +187,7 @@ def main():
     print 'Login...'
     cookies = login(url_login, headers, username, password)
     if not cookies:
-        print u'Login failed!'
-        exit(0)
+        sys.exit(u'Login failed!')
 
     while True:
         word = quote(raw_input(u'Please input a english word: ').strip())
@@ -188,8 +197,7 @@ def main():
         # 输入 q 退出程序
         if word == u'q':
             print u'Goodbye.'
-            exit(0)
-            # break
+            sys.exit(0)
 
         # 获取单词信息
         result_get = get_word(api_get_word, headers, cookies, word)
@@ -225,15 +233,44 @@ def main():
             print u'\nEnglish definition:'
             for en in word_en_definition:
                 print u'%s' % (en)
+
+        # iciba
+        if enable_iciba:
+            icb = iciba(headers=headers, audio=enable_icb_audio,
+                        lang=enable_icb_lang, syllable=enable_icb_syllable,
+                        extra=enable_icb_extra)
+            a = (iciba_syllable, iciba_audio, iciba_def,
+                 iciba_extra) = icb.get_data(word)
+
+            print u'----iciba.com----'
+            if iciba_syllable:
+                print u'音节划分：%s' % iciba_syllable
+            if iciba_def:
+                # print iciba_def
+                print '-'
+                for x in iciba_def:
+                    print '%s' % x
+            if iciba_extra:
+                print '-'
+                print iciba_extra
+            if iciba_audio:
+                word_audio = iciba_audio
+            print u'----iciba.com----'
+
         try:
             if auto_play and os.name == 'nt':
+                if iciba_audio:
+                    refere = icb.word_url
+                else:
+                    refere = None
                 # 临时保存音频文件
                 file_name = (str(time.time()) +
                              os.path.splitext(word_audio)[1] or '.mp3')
                 temp_file = os.path.realpath(tempfile.gettempdir() +
                                              file_name)
                 # print temp_file
-                audio = download_audio(word_audio, headers, cookies)
+                audio = download_audio(word_audio,headers, cookies,
+                                       refere=refere)
                 with open(temp_file, 'wb') as f:
                     f.write(audio)
                 # 播放单词读音
@@ -244,6 +281,22 @@ def main():
                 # print os.path.exists(temp_file)
         except:
             pass
+
+        # 例句
+        word_examples = []
+        if enable_example and word_leaning_id != 0:
+            word_example = get_example(api_get_example, headers,
+                                       cookies, word_leaning_id)
+            if word_example:
+                examples = word_example.get(u'examples')
+                for example in examples:
+                    word_examples.append('%(first)s*%(mid)s*%(last)s'
+                                         % (example) +
+                                         '\n%(translation)s' % (example))
+        if enable_example and word_examples:
+            print u'\nExamples:'
+            for ex in word_examples:
+                print u'%s' % (ex)
 
         if auto_add or ask_add:
             # 如果未收藏该单词
@@ -261,22 +314,6 @@ def main():
                     word_leaning_id = add_word(api_add_word,
                                                headers, cookies,
                                                word)[u'id']
-
-        # 例句
-        word_examples = list()
-        if enable_example and word_leaning_id != 0:
-            word_example = get_example(api_get_example, headers,
-                                       cookies, word_leaning_id)
-            if word_example:
-                examples = word_example.get(u'examples')
-                for example in examples:
-                    word_examples.append('%(first)s*%(mid)s*%(last)s'
-                                         % (example) +
-                                         '\n%(translation)s' % (example))
-        if enable_example and word_examples:
-            print u'\nExamples:'
-            for ex in word_examples:
-                print u'%s' % (ex)
 
         print u'-' * cmd_width
 

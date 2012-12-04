@@ -14,6 +14,7 @@
 * 询问是否添加单词到扇贝网词库（可选，默认启用）
 * 显示例句（显示用户在扇贝网添加的例句）（可选，默认禁用）
 * 配置文件（配置用户名、密码及其他功能项）
+* 从爱词霸网获取单词信息（可选，默认禁用）
 
 ## 依赖
 
@@ -29,8 +30,9 @@
 
 ## 截图
 
-默认：       
 ![截图-默认功能](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-01.png "截图-默认功能")
 
-火力全开：      
 ![截图-功能全开](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-02.png "截图-功能全开")
+
+[new]整合 iciba.com 上的单词信息：        
+![截图-iciba.com](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-03.png "截图-iciba.com")

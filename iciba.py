@@ -34,7 +34,7 @@ class Lciba(object):
             })
 
         query_r = requests.get(query_url, headers=query_headers,
-                               prefetch=False)
+                               stream=True)
         if query_r.status_code == requests.codes.ok:
             return query_r.text
         else:

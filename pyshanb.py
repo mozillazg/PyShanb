@@ -16,7 +16,7 @@ def login(url_login, headers, username, password):
     """
     # 首先访问一次网站，获取 cookies
     r_first_vist = requests.get(url_login, headers=headers,
-                                prefetch=False,)
+                                stream=True)
     # 判断 HTTP 状态码是否是 200
     if r_first_vist.status_code != requests.codes.ok:
         return None
@@ -45,12 +45,12 @@ def login(url_login, headers, username, password):
         'next': '',
     }
 
-    # 提交登录表单并提交第一次访问网站时生成的 cookies
+    # 提交登录表单同时提交第一次访问网站时生成的 cookies
     r_login = requests.post(url_post, headers=headers_post,
-                            cookies=cookies_post,
-                            data=data_post, prefetch=False)
+                            cookies=cookies_post, data=data_post,
+                            allow_redirects=False, stream=True)
     # print r_login.url
-    if r_login.status_code == requests.codes.ok:
+    if r_login.status_code == requests.codes.found:
         # 返回登录成功后生成的 cookies
         return r_login.cookies.get_dict()
     else:
@@ -62,7 +62,7 @@ def get_word(api, headers, cookies, word):
     """
     ur_get = api % (word)
     r_get = requests.get(ur_get, headers=headers,
-                         cookies=cookies, prefetch=False)
+                         cookies=cookies, stream=True)
     if r_get.status_code != requests.codes.ok:
         return None
 
@@ -70,7 +70,7 @@ def get_word(api, headers, cookies, word):
     # 如果网站 cookies 信息发生了变化，更新 cookies
     if new_cookies:
         cookies.update(new_cookies)
-    return r_get.json
+    return r_get.json()
 
 
 def add_word(api, headers, cookies, word):
@@ -78,14 +78,14 @@ def add_word(api, headers, cookies, word):
     """
     url_add = api % (word)
     r_add = requests.get(url_add, headers=headers, cookies=cookies,
-                         prefetch=False)
+                         stream=True)
     if r_add.status_code != requests.codes.ok:
         return None
 
     new_cookies = r_add.cookies.get_dict()
     if new_cookies:
         cookies.update(new_cookies)
-    return r_add.json
+    return r_add.json()
 
 
 def get_example(api, headers, cookies, learning_id):
@@ -93,11 +93,11 @@ def get_example(api, headers, cookies, learning_id):
     """
     url_example = api % (str(learning_id))
     r_example = requests.get(url_example, headers=headers,
-                             cookies=cookies, prefetch=False)
+                             cookies=cookies, stream=True)
     if r_example.status_code != requests.codes.ok:
         return None
 
-    example_json = r_example.json
+    example_json = r_example.json()
     # 判断是否包含例句信息
     if example_json.get('examples_status') != 1:
         return None
@@ -105,7 +105,7 @@ def get_example(api, headers, cookies, learning_id):
     new_cookies = r_example.cookies.get_dict()
     if new_cookies:
         cookies.update(new_cookies)
-    return example_json
+    return example_json()
 
 
 def download_audio(url_audio, headers, cookies=None, refere=None):
@@ -118,7 +118,7 @@ def download_audio(url_audio, headers, cookies=None, refere=None):
         'Refere': refere,
     })
     r_audio = requests.get(url_audio, headers=headers_d, cookies=cookies,
-                           prefetch=False)
+                           stream=True)
     if r_audio.status_code != requests.codes.ok:
         # raise r_audio.raise_for_status()
         return None
@@ -239,16 +239,17 @@ def main():
             icb = iciba(headers=headers, audio=enable_icb_audio,
                         lang=enable_icb_lang, syllable=enable_icb_syllable,
                         extra=enable_icb_extra)
-            a = (iciba_syllable, iciba_audio, iciba_def,
-                 iciba_extra) = icb.get_data(word)
+            info = icb.get_data(word)
+            info = info if info else [None] * 4
+            iciba_syllable, iciba_audio, iciba_def, iciba_extra = info
 
             print u'----iciba.com----'
             if iciba_syllable:
                 print u'音节划分：%s' % iciba_syllable
             if iciba_def:
                 # print iciba_def
-                print '-'
                 for x in iciba_def:
+                    print '-'
                     print '%s' % x
             if iciba_extra:
                 print '-'

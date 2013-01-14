@@ -39,7 +39,7 @@ def login(url_login, headers, username, password):
         'csrfmiddlewaretoken': token,  # 唯一标识
         'username': username,  # 用户名
         'password': password,  # 密码
-        'login': '登录',
+        'login': '',
         'continue': 'home',
         'u': 1,
         'next': '',
@@ -105,7 +105,7 @@ def get_example(api, headers, cookies, learning_id):
     new_cookies = r_example.cookies.get_dict()
     if new_cookies:
         cookies.update(new_cookies)
-    return example_json()
+    return example_json
 
 
 def download_audio(url_audio, headers, cookies=None, refere=None):
@@ -179,8 +179,8 @@ def main():
 
     headers = {
         'Host': urlparse.urlsplit(site).netloc,
-        'User-Agent': ('Mozilla/5.0 (Windows NT 6.2; rv:15.0) Gecko'
-                       + '/20100101 Firefox/15.0.1'),
+        'User-Agent': (' Mozilla/5.0 (Windows NT 6.2; rv:18.0) Gecko'
+                       + '/20100101 Firefox/18.0'),
     }
 
     # 登录
@@ -243,7 +243,7 @@ def main():
             info = info if info else [None] * 4
             iciba_syllable, iciba_audio, iciba_def, iciba_extra = info
 
-            print u'----iciba.com----'
+            print u'---iciba.com-begin---'
             if iciba_syllable:
                 print u'音节划分：%s' % iciba_syllable
             if iciba_def:
@@ -256,7 +256,7 @@ def main():
                 print iciba_extra
             if iciba_audio:
                 word_audio = iciba_audio
-            print u'----iciba.com----'
+            print u'---iciba.com-end-----'
 
         try:
             if auto_play and os.name == 'nt':

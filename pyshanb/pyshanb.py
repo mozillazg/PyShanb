@@ -138,8 +138,6 @@ def check_error(func):
 
 @check_error
 def main():
-    import sys
-
     if sys.version_info[0] == 3:
         sys.exit(u"Sorry, this program doesn't support Python 3 yet")
 
@@ -243,20 +241,21 @@ def main():
             info = info if info else [None] * 4
             iciba_syllable, iciba_audio, iciba_def, iciba_extra = info
 
-            print u'---iciba.com-begin---'
-            if iciba_syllable:
-                print u'音节划分：%s' % iciba_syllable
-            if iciba_def:
-                # print iciba_def
-                for x in iciba_def:
+            if any(info):
+                print u'---iciba.com-begin---'
+                if iciba_syllable:
+                    print u'音节划分：%s' % iciba_syllable
+                if iciba_def:
+                    # print iciba_def
+                    for x in iciba_def:
+                        print '-'
+                        print '%s' % x
+                if iciba_extra:
                     print '-'
-                    print '%s' % x
-            if iciba_extra:
-                print '-'
-                print iciba_extra
-            if iciba_audio:
-                word_audio = iciba_audio
-            print u'---iciba.com-end-----'
+                    print iciba_extra
+                if iciba_audio:
+                    word_audio = iciba_audio
+                print u'---iciba.com-end-----'
 
         try:
             if auto_play and os.name == 'nt':
@@ -270,7 +269,7 @@ def main():
                 temp_file = os.path.realpath(tempfile.gettempdir() +
                                              file_name)
                 # print temp_file
-                audio = download_audio(word_audio,headers, cookies,
+                audio = download_audio(word_audio, headers, cookies,
                                        refere=refere)
                 with open(temp_file, 'wb') as f:
                     f.write(audio)

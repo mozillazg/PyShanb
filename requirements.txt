@@ -1,2 +1,1 @@
-mp3play>=0.1.15
 requests>=1.1.0

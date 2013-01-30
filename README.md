@@ -1,8 +1,6 @@
 # PyShanb：命令行下的扇贝网查词工具
 
-基于[扇贝网 API v0.8](http://www.shanbay.com/support/dev/api.html "扇贝网 API v0.8")开发的一个命令行下的查词工具。支持将生词添加到扇贝网的个人词库中。
-
-![截图-默认功能](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-01.png "截图-默认功能")
+基于 [扇贝网 API v0.8](http://www.shanbay.com/support/dev/api.html "扇贝网 API v0.8") 开发的一个命令行下的查词工具。支持将生词添加到扇贝网的个人词库中。
 
 ## 功能
 
@@ -20,19 +18,10 @@
 
 * [python 2.6 or 2.7](http://www.python.org/ "www.python.org")
 * [requests](https://github.com/kennethreitz/requests "requests-github")
-* [mp3play(windows only)](https://code.google.com/p/mp3play/ "mp3play-url")
+* [mp3play(windows only，可选)](https://code.google.com/p/mp3play/ "mp3play-url")
 
 ## 安装使用
 
 1. 安装依赖模块：`pip install -r requirements.txt`；
 2. 配置用户名及密码（pyshanb.conf）；
 3. 命令行下执行：`python pyshanb.py`（Tips：使用过程中输入 `q` 即可退出程序）。
-
-## 截图
-
-![截图-默认功能](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-01.png "截图-默认功能")
-
-![截图-功能全开](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-02.png "截图-功能全开")
-
-[new]整合 iciba.com 上的单词信息：        
-![截图-iciba.com](https://github.com/mozillazg/my-blog-file/raw/master/2012/11/pyshanb-03.png "截图-iciba.com")

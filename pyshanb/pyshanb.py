@@ -247,8 +247,8 @@ def main():
                     print u'音节划分：%s' % iciba_syllable
                 if iciba_def:
                     # print iciba_def
+                    print '-'
                     for x in iciba_def:
-                        print '-'
                         print '%s' % x
                 if iciba_extra:
                     print '-'

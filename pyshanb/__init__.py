@@ -5,7 +5,5 @@
 PyShanb - 命令行下的扇贝词典
 """
 
-__version__ = '0.3.1'
-# __authors__ = [
-    # 'mozillazg <mozillazg101@gmail.com>'
-# ]
+__version_info__ = (0, 4, 0, 'beta', 2)
+__version__ = filter(lambda n: isinstance(n, int), __version_info__)

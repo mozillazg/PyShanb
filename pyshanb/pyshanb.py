@@ -13,7 +13,8 @@ import tempfile
 import os
 import time
 
-import conf
+from cmdoption import CmdOption
+from conf import Settings
 from shanbay import Shanbay
 from shanbay import LoginException
 
@@ -53,9 +54,16 @@ def main():
     if sys.version_info[0] == 3:
         sys.exit(u"Sorry, this program doesn't support Python 3 yet")
 
+    # 获取各命令行参数的值
+    options = CmdOption().options
+    configfile = options.settings
+    username = options.username
+    password = options.password
+
+    conf = Settings(configfile, username, password).settings
     site = conf.site
-    username = conf.username
-    password = conf.password
+    username = username or conf.username
+    password = password or conf.password
     auto_play = conf.auto_play  # 自动播放单词读音
     if auto_play and os.name == 'nt':
         import mp3play

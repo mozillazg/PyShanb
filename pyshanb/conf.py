@@ -12,6 +12,8 @@ class Settings(object):
         self.configs = ConfigParser.RawConfigParser()
         # 读取配置文件。
         self.configs.read(self.config_file)
+        self.has_username = username
+        self.has_password = password
 
         # 如果没有配置文件或没有用户名及密码的配置项
         # 则创建默认配置文件
@@ -20,11 +22,10 @@ class Settings(object):
                 and self.configs.has_option('General', 'username')
                 and self.configs.has_option('General', 'password')):
             self.default_config(username, password)
-            # self.configs.read(self.config_file)
 
     @property
     def settings(self):
-        self.get_settings()
+        self.get_settings(self.has_username, self.has_password)
         return self
 
     def default_config(self, username='', password=''):
@@ -59,7 +60,7 @@ class Settings(object):
         except:
             return default
 
-    def get_settings(self):
+    def get_settings(self, has_username=False, has_password=False):
         """获取配置文件中相关选项的值
         """
         configs = self.configs
@@ -68,9 +69,13 @@ class Settings(object):
         # 用户名及密码
         self.username = configs.get('General', 'username')
         self.password = configs.get('General', 'password')
-        if not (self.username and self.password):
-                a = u'Please configure your username and password'
-                sys.exit(u'%s by config file(%s)' % (a, CONFIGFILE))
+        if not ((self.username or has_username)
+                and (self.password or has_password)):
+                a = u'Please configure your username and/or password'
+                b = 'or command line option, like below:\n'
+                b += 'pyshanb.py -u root -p abc'
+                sys.exit(u'%s by editor config file:\n%s\n%s'
+                         % (a, os.path.realpath(CONFIGFILE), b))
 
         # 其他非必需项。如果未配置相关选项则使用默认值
         self.auto_play = get_option_value(configs.getboolean, 'General',
@@ -110,6 +115,7 @@ class Settings(object):
         self.api_get_word = '/api/word/%s'
         self.api_add_word = '/api/learning/add/%s'
         self.api_get_example = '/api/learning/examples/%s'
+        self.api_get_user_info = '/api/user/info/'
 
 
 def main():

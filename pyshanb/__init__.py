@@ -5,5 +5,5 @@
 PyShanb - 命令行下的扇贝词典
 """
 
-__version_info__ = (0, 4, 0, 'beta', 2)
+__version_info__ = (0, 4, 0, 'beta', 3)
 __version__ = filter(lambda n: isinstance(n, int), __version_info__)

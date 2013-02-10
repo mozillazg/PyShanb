@@ -89,6 +89,7 @@ def main():
     api_get_word = site + conf.api_get_word  # 获取单词信息的 api
     api_get_example = site + conf.api_get_example  # 获取例句的 api
     api_add_word = site + conf.api_add_word  # 保存单词的 api
+    api_get_user_info = site + conf.api_get_user_info  # 获取用户信息的 api
 
     cmd_width = 55
 
@@ -101,6 +102,8 @@ def main():
     # 登录
     print 'Login...'
     shanbay = Shanbay(url_login, headers, username, password)
+    user_info = shanbay.get_user_info(api_get_user_info)
+    print u'Welcome! %s.' % user_info.get('nickname')
 
     while True:
         word = quote(raw_input(u'Please input a english word: ').strip())

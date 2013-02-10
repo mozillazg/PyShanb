@@ -98,8 +98,24 @@ class Shanbay(object):
 
         example_json = r_example.json()
         # 判断是否包含例句信息
-        if example_json.get('examples_status') != 1:
+        if not example_json.get('examples_status'):
             return None
 
         self.cookies.update(r_example.cookies.get_dict())
         return example_json
+
+    def get_user_info(self, api):
+        """获取用户信息
+        """
+        r_user = requests.get(api, headers=self.headers,
+                              cookies=self.cookies, stream=True)
+        if r_user.status_code != requests.codes.ok:
+            return None
+
+        user_json = r_user.json()
+        # 判断是否包含例句信息
+        if not user_json.get('result'):
+            return None
+
+        self.cookies.update(r_user.cookies.get_dict())
+        return user_json

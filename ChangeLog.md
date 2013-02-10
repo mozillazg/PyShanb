@@ -1,5 +1,10 @@
 # PyShanb changelog
 
+## 2013-02-10 0.4
+
+* 增加命令行参数
+* 获取用户昵称
+
 ## 2013-01-14 0.3
 
 * 适应新版 requests(1.x) 和 shanbay.com. thanks @hongyuan19 .

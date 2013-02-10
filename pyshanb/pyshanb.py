@@ -59,6 +59,8 @@ def main():
     configfile = options.settings
     username = options.username
     password = options.password
+    if configfile:
+        configfile = os.path.realpath(configfile)
 
     conf = Settings(configfile, username, password).settings
     site = conf.site

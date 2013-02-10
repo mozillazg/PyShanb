@@ -1,120 +1,30 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""在命令行下使用扇贝网查询单词
+"""命令行下扇贝词典
 """
 
 import sys
 import requests
 import urlparse
 import copy
+from urllib2 import quote
+import tempfile
+import os
+import time
+
+import conf
+from shanbay import Shanbay
+from shanbay import LoginException
 
 
-def login(url_login, headers, username, password):
-    """登录扇贝网
-    返回 cookies
-    """
-    # 首先访问一次网站，获取 cookies
-    r_first_vist = requests.get(url_login, headers=headers,
-                                stream=True)
-    # 判断 HTTP 状态码是否是 200
-    if r_first_vist.status_code != requests.codes.ok:
-        return None
-    # 获取 cookies 信息
-    cookies_first_vist = r_first_vist.cookies.get_dict()
-
-    # 准备用于登录的信息
-    url_post = url_login
-    # 获取用于用户标识的 cookies（身份令牌）
-    token = cookies_first_vist.get('csrftoken')
-    # 设置 headers
-    headers_post = copy.deepcopy(headers)
-    headers_post.update({
-        'Refere': url_login,
-        'Content-Type': 'application/x-www-form-urlencoded',
-    })
-    cookies_post = cookies_first_vist
-    # post 提交的内容
-    data_post = {
-        'csrfmiddlewaretoken': token,  # 唯一标识
-        'username': username,  # 用户名
-        'password': password,  # 密码
-        'login': '',
-        'continue': 'home',
-        'u': 1,
-        'next': '',
-    }
-
-    # 提交登录表单同时提交第一次访问网站时生成的 cookies
-    r_login = requests.post(url_post, headers=headers_post,
-                            cookies=cookies_post, data=data_post,
-                            allow_redirects=False, stream=True)
-    # print r_login.url
-    if r_login.status_code == requests.codes.found:
-        # 返回登录成功后生成的 cookies
-        return r_login.cookies.get_dict()
-    else:
-        return None
-
-
-def get_word(api, headers, cookies, word):
-    """获取单词信息
-    """
-    ur_get = api % (word)
-    r_get = requests.get(ur_get, headers=headers,
-                         cookies=cookies, stream=True)
-    if r_get.status_code != requests.codes.ok:
-        return None
-
-    new_cookies = r_get.cookies.get_dict()
-    # 如果网站 cookies 信息发生了变化，更新 cookies
-    if new_cookies:
-        cookies.update(new_cookies)
-    return r_get.json()
-
-
-def add_word(api, headers, cookies, word):
-    """收藏单词
-    """
-    url_add = api % (word)
-    r_add = requests.get(url_add, headers=headers, cookies=cookies,
-                         stream=True)
-    if r_add.status_code != requests.codes.ok:
-        return None
-
-    new_cookies = r_add.cookies.get_dict()
-    if new_cookies:
-        cookies.update(new_cookies)
-    return r_add.json()
-
-
-def get_example(api, headers, cookies, learning_id):
-    """获取用户在扇贝网添加的例句
-    """
-    url_example = api % (str(learning_id))
-    r_example = requests.get(url_example, headers=headers,
-                             cookies=cookies, stream=True)
-    if r_example.status_code != requests.codes.ok:
-        return None
-
-    example_json = r_example.json()
-    # 判断是否包含例句信息
-    if example_json.get('examples_status') != 1:
-        return None
-
-    new_cookies = r_example.cookies.get_dict()
-    if new_cookies:
-        cookies.update(new_cookies)
-    return example_json
-
-
-def download_audio(url_audio, headers, cookies=None, refere=None):
+def download_audio(url_audio, headers, host=None, cookies=None, refere=None):
     """下载音频文件
     返回文件内容
     """
     headers_d = copy.deepcopy(headers)
     headers_d.update({
-        'Host': urlparse.urlsplit(url_audio).netloc,
+        'Host': host or urlparse.urlsplit(url_audio).netloc,
         'Refere': refere,
     })
     r_audio = requests.get(url_audio, headers=headers_d, cookies=cookies,
@@ -131,6 +41,8 @@ def check_error(func):
     def check(*args, **kwargs):
         try:
             return func(*args, **kwargs)
+        except LoginException:
+            sys.exit(u'Login failed!')
         except requests.exceptions.RequestException:
             sys.exit(u"Network trouble!")
     return check
@@ -141,25 +53,22 @@ def main():
     if sys.version_info[0] == 3:
         sys.exit(u"Sorry, this program doesn't support Python 3 yet")
 
-    from urllib2 import quote
-    import tempfile
-    import os
-    import time
-    import conf
-
     site = conf.site
     username = conf.username
     password = conf.password
     auto_play = conf.auto_play  # 自动播放单词读音
     if auto_play and os.name == 'nt':
         import mp3play
+    else:
+        auto_play = False
 
+    # shanbay.com
     auto_add = conf.auto_add  # 自动保存单词到扇贝网
     ask_add = conf.ask_add  # 询问是否保存单词
     enable_en_definition = conf.enable_en_definition  # 单词英文释义
     enable_example = conf.enable_example  # 用户自己添加的单词例句
 
-    # iciba
+    # iciba.com
     enable_iciba = conf.enable_iciba
     enable_icb_audio = conf.enable_icb_audio
     enable_icb_lang = conf.enable_icb_lang
@@ -183,9 +92,7 @@ def main():
 
     # 登录
     print 'Login...'
-    cookies = login(url_login, headers, username, password)
-    if not cookies:
-        sys.exit(u'Login failed!')
+    shanbay = Shanbay(url_login, headers, username, password)
 
     while True:
         word = quote(raw_input(u'Please input a english word: ').strip())
@@ -198,14 +105,15 @@ def main():
             sys.exit(0)
 
         # 获取单词信息
-        result_get = get_word(api_get_word, headers, cookies, word)
-        if not result_get:
+        word_info = shanbay.get_word(api_get_word, word)
+        if not word_info:
+            print u"'%s' may not be a english word!" % word
             continue
 
         # 输出单词信息
         # 学习记录
-        word_leaning_id = result_get[u'learning_id']
-        voc = result_get.get(u'voc')
+        word_leaning_id = word_info.get(u'learning_id')
+        voc = word_info.get(u'voc')
         if not voc:
             print u"'%s' may not be a english word!" % word
             continue
@@ -216,15 +124,17 @@ def main():
         # 音频文件
         word_audio = voc.get(u'audio')
         # 英文解释
-        word_en_definition = [u'%s. %s' % (p, ','.join(d))
-                              for p, d in voc.get(u'en_definitions'
-                                                  ).iteritems()]
+        word_en_definitions = voc.get(u'en_definitions')
+        if word_en_definitions:
+            word_en_definition = [u'%s. %s' % (p, ','.join(d))
+                                  for p, d in word_en_definitions.iteritems()]
+        else:
+            word_en_definition = None
         # 中文解释
         word_definition = voc.get(u'definition')
 
         # print u'%s [%s]' % (word_content, word_pron)
-        print u'%s' % (word_content)
-        print u'-' * cmd_width
+        print ' %s '.center(cmd_width, '-') % word_content
         print u'%s' % (word_definition)
 
         if enable_en_definition and word_en_definition:
@@ -242,7 +152,8 @@ def main():
             iciba_syllable, iciba_audio, iciba_def, iciba_extra = info
 
             if any(info):
-                print u'---iciba.com-begin---'
+                cmd_width_icb = 21
+                print u'iciba.com-begin'.center(cmd_width_icb, '-')
                 if iciba_syllable:
                     print u'音节划分：%s' % iciba_syllable
                 if iciba_def:
@@ -255,7 +166,7 @@ def main():
                     print iciba_extra
                 if iciba_audio:
                     word_audio = iciba_audio
-                print u'---iciba.com-end-----'
+                print u'iciba.com-end'.center(cmd_width_icb, '-')
 
         try:
             if auto_play and os.name == 'nt':
@@ -269,8 +180,7 @@ def main():
                 temp_file = os.path.realpath(tempfile.gettempdir() +
                                              file_name)
                 # print temp_file
-                audio = download_audio(word_audio, headers, cookies,
-                                       refere=refere)
+                audio = download_audio(word_audio, headers, refere=refere)
                 with open(temp_file, 'wb') as f:
                     f.write(audio)
                 # 播放单词读音
@@ -285,14 +195,14 @@ def main():
         # 例句
         word_examples = []
         if enable_example and word_leaning_id != 0:
-            word_example = get_example(api_get_example, headers,
-                                       cookies, word_leaning_id)
+            word_example = shanbay.get_example(api_get_example,
+                                               word_leaning_id)
             if word_example:
                 examples = word_example.get(u'examples')
                 for example in examples:
-                    word_examples.append('%(first)s*%(mid)s*%(last)s'
-                                         % (example) +
-                                         '\n%(translation)s' % (example))
+                    word_examples.append('%(first)s*%(mid)s*%(last)s' % example
+                                         + '\n%(translation)s' % example)
+
         if enable_example and word_examples:
             print u'\nExamples:'
             for ex in word_examples:
@@ -300,22 +210,23 @@ def main():
 
         if auto_add or ask_add:
             # 如果未收藏该单词
-            if word_leaning_id == 0:
+            if not word_leaning_id:
                 if ask_add:
                     ask = raw_input('Do you want add ' +
                                     '"%s" to shanbay.com? (y/n): '
-                                    % (word_content)).strip().lower()
+                                    % word_content).strip().lower()
                     if ask.startswith('y'):
                         # 收藏单词
-                        word_leaning_id = add_word(api_add_word,
-                                                   headers, cookies,
-                                                   word)[u'id']
+                        word_leaning_id = shanbay.add_word(api_add_word,
+                                                           word)['id']
+                        print '"%s" has been added to shanbay.com'\
+                              % word_content
                 else:
-                    word_leaning_id = add_word(api_add_word,
-                                               headers, cookies,
-                                               word)[u'id']
+                    word_leaning_id = shanbay.add_word(api_add_word, word
+                                                       ).get('id')
+                    print '"%s" has been added to shanbay.com' % word_content
 
-        print u'-' * cmd_width
+        print '-' * cmd_width
 
 if __name__ == '__main__':
     main()

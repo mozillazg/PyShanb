@@ -8,4 +8,3 @@
 * 正常显示音标（默认不输出音标）
 * 使用 pygame 播放音频文件（解决跨平台问题）
 * 使用[金山词霸 API](http://web.iciba.com/partner/api01.shtml)
-* 分离对扇贝网数据的操作（shanbay.py）

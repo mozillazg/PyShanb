@@ -15,7 +15,7 @@ class Lciba(object):
     """
     def __init__(self, headers=None, audio=False, lang='en-US',
                  syllable=False, extra=False):
-        self.headers = headers
+        self.headers = copy.deepcopy(headers)
         self.audio = audio
         self.lang = lang
         self.syllable = syllable
@@ -27,11 +27,10 @@ class Lciba(object):
         """查询单词，返回网页内容
         """
         self.word_url = query_url = self.query_api % word
-        query_headers = copy.deepcopy(self.headers)
-        if query_headers:
-            query_headers.update({
-                'Host': urlparse.urlsplit(query_url).netloc,
-            })
+        query_headers = self.headers
+        query_headers.update({
+            'Host': urlparse.urlsplit(query_url).netloc,
+        })
 
         query_r = requests.get(query_url, headers=query_headers,
                                stream=True)

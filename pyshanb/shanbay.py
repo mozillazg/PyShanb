@@ -119,3 +119,15 @@ class Shanbay(object):
 
         self.cookies.update(r_user.cookies.get_dict())
         return user_json
+
+    def add_example(self, api, learning_id, sentence, translation):
+        """添加例句
+        """
+        url_add = api % (learning_id, sentence, translation)
+        r_add = requests.get(url_add, headers=self.headers,
+                             cookies=self.cookies, stream=True)
+        if r_add.status_code != requests.codes.ok:
+            return None
+
+        self.cookies.update(r_add.cookies.get_dict())
+        return r_add.json()

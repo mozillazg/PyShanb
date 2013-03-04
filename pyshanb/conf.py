@@ -39,6 +39,7 @@ class Settings(object):
         self.configs.set('General', 'ask_add', '1')
         self.configs.set('General', 'enable_en_definition', '0')
         self.configs.set('General', 'enable_example', '0')
+        self.configs.set('General', 'ask_add_example', '1')
 
         self.configs.add_section('iciba')
         self.configs.set('iciba', 'enabled', '0')
@@ -71,10 +72,10 @@ class Settings(object):
         self.password = configs.get('General', 'password')
         if not ((self.username or has_username)
                 and (self.password or has_password)):
-                a = u'Please configure your username and/or password'
+                a = u'Please configure your username and/or password,\n'
                 b = 'or command line option, like below:\n'
-                b += 'pyshanb.py -u root -p abc'
-                sys.exit(u'%s by editor config file:\n%s\n%s'
+                b += '    pyshanb.py -u root -p abc'
+                sys.exit(u'%sby editor config file:\n    %s\n%s'
                          % (a, os.path.realpath(CONFIGFILE), b))
 
         # 其他非必需项。如果未配置相关选项则使用默认值
@@ -91,6 +92,8 @@ class Settings(object):
                                                      False)
         self.enable_example = get_option_value(configs.getboolean, 'General',
                                                'enable_example', False)
+        self.ask_add_example = get_option_value(configs.getboolean, 'General',
+                                                'ask_add_example', True)
 
         # iciba
         self.enable_iciba = get_option_value(configs.getboolean, 'iciba',
@@ -116,6 +119,7 @@ class Settings(object):
         self.api_add_word = '/api/learning/add/%s'
         self.api_get_example = '/api/learning/examples/%s'
         self.api_get_user_info = '/api/user/info/'
+        self.api_add_example = '/api/example/add/%s?sentence=%s&translation=%s'
 
 
 def main():
@@ -127,6 +131,7 @@ def main():
     print 'auto_add:', settings.auto_add
     print 'enable_en_definition:', settings.enable_en_definition
     print 'enable_example:', settings.enable_example
+    print 'ask_add_example:', settings.ask_add_example
     print 'site:', settings.site
     print 'url_login:', settings.url_login
     print 'api_get_word:', settings.api_get_word

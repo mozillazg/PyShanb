@@ -15,6 +15,7 @@
 * 从爱词霸网获取单词信息（可选，默认禁用）
 * 通过命令行参数指定配置文件、用户名及密码
 * 登录后显示用户昵称
+* 添加单词例句（可选，默认启用）
 
 ## 依赖
 
@@ -28,17 +29,19 @@
 2. 配置用户名及密码（pyshanb.conf）；
 3. 命令行下执行：`python pyshanb.py`（Tips：使用过程中输入 `q` 即可退出程序）。
 
-## 命令行参数
+### 命令行参数
 
     >python pyshanb.py --help
-    Usage: pyshanb.py [-s SETTINGS] [-u USERNAME] [-p PASSWORD] [--version]
+    Usage: pyshanb.py [-s SETTINGS] [-u USERNAME] [-p PASSWORD] [-e | -E] [--version]
 
     Options:
-      --version             show program's version number and exit
-      -h, --help            show this help message and exit
-      -s SETTINGS, --settings=SETTINGS
-                            The settings file of the application.
-      -u USERNAME, --username=USERNAME
-                            The account username of shanbay.com.
-      -p PASSWORD, --password=PASSWORD
-                            The account password of shanbay.com.
+    --version             show program's version number and exit
+    -h, --help            show this help message and exit
+    -s SETTINGS, --settings=SETTINGS
+                          The settings file of the application.
+    -u USERNAME, --username=USERNAME
+                          The account username of shanbay.com.
+    -p PASSWORD, --password=PASSWORD
+                          The account password of shanbay.com.
+    -e                    Enable "Add example" feature.
+    -E                    Disable "Add example" feature.

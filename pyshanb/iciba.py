@@ -28,12 +28,13 @@ class Lciba(object):
         """
         self.word_url = query_url = self.query_api % word
         query_headers = self.headers
-        query_headers.update({
-            'Host': urlparse.urlsplit(query_url).netloc,
-        })
+        if query_headers:
+            query_headers.update({
+                'Host': urlparse.urlsplit(query_url).netloc,
+            })
 
         query_r = requests.get(query_url, headers=query_headers,
-                               stream=True)
+                               cookies=None, stream=True)
         if query_r.status_code == requests.codes.ok:
             return query_r.text
         else:

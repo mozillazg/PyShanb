@@ -248,8 +248,14 @@ def main():
             ask = raw_input('Do you want to add a example for '
                             'this word? (y/n): ')
             if ask.strip().lower().startswith('y'):
-                sentence = raw_input('Please input sentence:\n').strip(' \n')
-                translation = raw_input('Please input translation:\n')
+                sentence = None
+                translation = None
+
+                while not sentence:
+                    sentence = raw_input('Please input sentence:\n')
+                while not translation:
+                    translation = raw_input('Please input translation:\n')
+                sentence = sentence.strip(' \n')
                 translation = translation.strip(' \n')
                 encoding = sys.stdin.encoding
                 translation = translation.decode(encoding).encode('utf8')

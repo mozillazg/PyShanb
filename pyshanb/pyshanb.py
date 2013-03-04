@@ -59,6 +59,7 @@ def main():
     configfile = options.settings
     username = options.username
     password = options.password
+    ask_add_example = options.ask_add_example
     if configfile:
         configfile = os.path.realpath(configfile)
 
@@ -77,7 +78,8 @@ def main():
     ask_add = conf.ask_add  # 询问是否保存单词
     enable_en_definition = conf.enable_en_definition  # 单词英文释义
     enable_example = conf.enable_example  # 用户自己添加的单词例句
-    ask_add_example = conf.ask_add_example  # 询问是否添加例句
+    if ask_add_example is None:
+        ask_add_example = conf.ask_add_example  # 询问是否添加例句
 
     # iciba.com
     enable_iciba = conf.enable_iciba
@@ -248,11 +250,13 @@ def main():
             if ask.strip().lower().startswith('y'):
                 sentence = raw_input('Please input sentence:\n').strip(' \n')
                 translation = raw_input('Please input translation:\n')
+                translation = translation.strip(' \n')
                 encoding = sys.stdin.encoding
-                translation = translation.strip(' \n').decode(encoding)
+                translation = translation.decode(encoding).encode('utf8')
 
                 result = shanbay.add_example(api_add_example, word_learning_id,
-                                             sentence, translation)
+                                             quote(sentence),
+                                             quote(translation))
                 if result.get('example_status') == 1:
                     print 'Add success'
 

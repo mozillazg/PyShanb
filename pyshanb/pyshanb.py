@@ -69,7 +69,10 @@ def main():
     password = password or conf.password
     auto_play = conf.auto_play  # 自动播放单词读音
     if auto_play and os.name == 'nt':
-        import mp3play
+        try:
+            import mp3play
+        except ImportError:
+            auto_play = False
     else:
         auto_play = False
 

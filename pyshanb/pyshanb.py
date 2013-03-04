@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""命令行下扇贝词典
+"""命令行下的扇贝词典
 """
 
 import sys

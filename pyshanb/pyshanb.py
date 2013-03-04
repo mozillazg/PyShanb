@@ -77,6 +77,7 @@ def main():
     ask_add = conf.ask_add  # 询问是否保存单词
     enable_en_definition = conf.enable_en_definition  # 单词英文释义
     enable_example = conf.enable_example  # 用户自己添加的单词例句
+    ask_add_example = conf.ask_add_example  # 询问是否添加例句
 
     # iciba.com
     enable_iciba = conf.enable_iciba
@@ -92,6 +93,7 @@ def main():
     api_get_example = site + conf.api_get_example  # 获取例句的 api
     api_add_word = site + conf.api_add_word  # 保存单词的 api
     api_get_user_info = site + conf.api_get_user_info  # 获取用户信息的 api
+    api_add_example = site + conf.api_add_example  # 添加例句的 api
 
     cmd_width = 55
 
@@ -125,7 +127,7 @@ def main():
 
         # 输出单词信息
         # 学习记录
-        word_leaning_id = word_info.get(u'learning_id')
+        word_learning_id = word_info.get(u'learning_id')
         voc = word_info.get(u'voc')
         if not voc:
             print u"'%s' may not be a english word!" % word
@@ -207,9 +209,9 @@ def main():
 
         # 例句
         word_examples = []
-        if enable_example and word_leaning_id != 0:
+        if enable_example and word_learning_id != 0:
             word_example = shanbay.get_example(api_get_example,
-                                               word_leaning_id)
+                                               word_learning_id)
             if word_example:
                 examples = word_example.get(u'examples')
                 for example in examples:
@@ -223,21 +225,36 @@ def main():
 
         if auto_add or ask_add:
             # 如果未收藏该单词
-            if not word_leaning_id:
+            if not word_learning_id:
                 if ask_add:
-                    ask = raw_input('Do you want add ' +
+                    ask = raw_input('Do you want to add ' +
                                     '"%s" to shanbay.com? (y/n): '
                                     % word_content).strip().lower()
                     if ask.startswith('y'):
                         # 收藏单词
-                        word_leaning_id = shanbay.add_word(api_add_word,
-                                                           word)['id']
+                        word_learning_id = shanbay.add_word(api_add_word, word)
+                        word_learning_id = word_learning_id.get('id')
                         print '"%s" has been added to shanbay.com'\
                               % word_content
                 else:
-                    word_leaning_id = shanbay.add_word(api_add_word, word
-                                                       ).get('id')
+                    word_learning_id = shanbay.add_word(api_add_word, word)
+                    word_learning_id = word_learning_id.get('id')
                     print '"%s" has been added to shanbay.com' % word_content
+
+        # 添加例句
+        if word_learning_id and ask_add_example:
+            ask = raw_input('Do you want to add a example for '
+                            'this word? (y/n): ')
+            if ask.strip().lower().startswith('y'):
+                sentence = raw_input('Please input sentence:\n').strip(' \n')
+                translation = raw_input('Please input translation:\n')
+                encoding = sys.stdin.encoding
+                translation = translation.strip(' \n').decode(encoding)
+
+                result = shanbay.add_example(api_add_example, word_learning_id,
+                                             sentence, translation)
+                if result.get('example_status') == 1:
+                    print 'Add success'
 
         print '-' * cmd_width
 

@@ -60,6 +60,9 @@ def main():
     username = options.username
     password = options.password
     ask_add_example = options.ask_add_example
+    enable_iciba = options.enable_iciba
+    auto_play = options.auto_play
+    
     if configfile:
         configfile = os.path.realpath(configfile)
 
@@ -67,7 +70,9 @@ def main():
     site = conf.site
     username = username or conf.username
     password = password or conf.password
-    auto_play = conf.auto_play  # 自动播放单词读音
+
+    if auto_play is None:
+        auto_play = conf.auto_play  # 自动播放单词读音
     if auto_play and os.name == 'nt':
         try:
             import mp3play
@@ -81,11 +86,13 @@ def main():
     ask_add = conf.ask_add  # 询问是否保存单词
     enable_en_definition = conf.enable_en_definition  # 单词英文释义
     enable_example = conf.enable_example  # 用户自己添加的单词例句
+    
     if ask_add_example is None:
         ask_add_example = conf.ask_add_example  # 询问是否添加例句
 
     # iciba.com
-    enable_iciba = conf.enable_iciba
+    if enable_iciba is None:
+        enable_iciba = conf.enable_iciba
     enable_icb_audio = conf.enable_icb_audio
     enable_icb_lang = conf.enable_icb_lang
     enable_icb_syllable = conf.enable_icb_syllable
@@ -135,7 +142,7 @@ def main():
         word_learning_id = word_info.get(u'learning_id')
         voc = word_info.get(u'voc')
         if not voc:
-            print u"'%s' may not be a english word!" % word
+            print u"'%s' may not be an english word!" % word
             continue
         # 单词本身
         word_content = voc.get(u'content')

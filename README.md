@@ -26,13 +26,14 @@
 ## 安装使用
 
 1. 安装依赖模块：`pip install -r requirements.txt`；
-2. 配置用户名及密码（pyshanb.conf）；
+2. 配置用户名及密码（通过配置文件（pyshanb.conf）或命令行参数（-u -p））；
 3. 命令行下执行：`python pyshanb.py`（Tips：使用过程中输入 `q` 即可退出程序）。
 
 ### 命令行参数
 
     >python pyshanb.py --help
-    Usage: pyshanb.py [-s SETTINGS] [-u USERNAME] [-p PASSWORD] [-e | -E] [--version]
+    Usage: pyshanb.py [-s SETTINGS] [-u USERNAME] [-p PASSWORD]
+                    [-e | -E] [-i | -I] [-a | -A] [--version]
 
     Options:
     --version             show program's version number and exit
@@ -40,8 +41,12 @@
     -s SETTINGS, --settings=SETTINGS
                           The settings file of the application.
     -u USERNAME, --username=USERNAME
-                          The account username of shanbay.com.
+                          The username of shanbay.com.
     -p PASSWORD, --password=PASSWORD
-                          The account password of shanbay.com.
+                          The password of shanbay.com.
     -e                    Enable "Add example" feature.
     -E                    Disable "Add example" feature.
+    -i                    Enable "Get data from iciba.com" feature.
+    -I                    Disable "Get data from iciba.com" feature.
+    -a                    Enable "Auto play audio" feature.
+    -A                    Disable "Auto play audio" feature.

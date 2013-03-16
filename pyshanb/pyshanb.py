@@ -135,7 +135,7 @@ def main():
         word_learning_id = word_info.get(u'learning_id')
         voc = word_info.get(u'voc')
         if not voc:
-            print u"'%s' may not be a english word!" % word
+            print u"'%s' may not be an english word!" % word
             continue
         # 单词本身
         word_content = voc.get(u'content')

@@ -41,7 +41,7 @@ class Lciba(object):
             return None
 
     def get_data(self, word):
-        """获取单词简明释义，get_data(self, word) -> datas
+        """获取单词简明释义
 
         返回值：
         (u'音节划分', u'audio url', ((u'词性', u'解释'),...), u'同义词之类的'))

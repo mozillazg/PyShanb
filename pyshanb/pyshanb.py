@@ -263,18 +263,29 @@ def main():
 
                 while not sentence:
                     sentence = raw_input('Please input sentence:\n')
-                while not translation:
-                    translation = raw_input('Please input translation:\n')
-                sentence = sentence.strip(' \n')
-                translation = translation.strip(' \n')
-                encoding = sys.stdin.encoding
-                translation = translation.decode(encoding).encode('utf8')
+                    if sentence.strip(' \n').lower() == 'q':
+                        sentence = None
+                        break
+                if sentence:
+                    while not translation:
+                        translation = raw_input('Please input translation:\n')
+                        if translation.strip(' \n').lower() == 'q':
+                            translation = None
+                            break
+                if sentence and translation:
+                    sentence = sentence.strip(' \n')
+                    translation = translation.strip(' \n')
+                    encoding = sys.stdin.encoding
+                    translation = translation.decode(encoding).encode('utf8')
 
-                result = shanbay.add_example(api_add_example, word_learning_id,
-                                             quote(sentence),
-                                             quote(translation))
-                if result.get('example_status') == 1:
-                    print 'Add success'
+                    result = shanbay.add_example(api_add_example,
+                                                 word_learning_id,
+                                                 quote(sentence),
+                                                 quote(translation))
+                    if result.get('example_status') == 1:
+                        print 'Add success'
+        else:
+            pass
 
         print '-' * cmd_width
 

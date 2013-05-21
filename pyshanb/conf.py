@@ -74,7 +74,8 @@ class Settings(object):
                 and (self.password or has_password)):
                 a = u'Please configure your username and/or password,\n'
                 b = 'or command line option, like below:\n'
-                b += '    pyshanb.py -u root -p abc'
+                b += '    shanbay -u username -p password\n'
+                b += '    python pyshanb.py -u username -p password\n'
                 sys.exit(u'%sby editor config file:\n    %s\n%s'
                          % (a, os.path.realpath(CONFIGFILE), b))
 

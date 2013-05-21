@@ -1,6 +1,7 @@
 # PyShanb：命令行下的扇贝词典
 
-基于 [扇贝网 API v0.8](http://www.shanbay.com/support/dev/api.html "扇贝网 API v0.8") 开发的一个命令行下的查词工具。支持将生词添加到扇贝网的个人词库中。
+基于 [扇贝网 API v0.8](http://www.shanbay.com/support/dev/api.html "扇贝网 API v0.8") 开发的一个命令行下的查词工具。
+支持将生词添加到扇贝网的个人词库中。
 
 ## 功能
 
@@ -25,14 +26,15 @@
 
 ## 安装使用
 
-1. 安装依赖模块：`pip install -r requirements.txt`；
+1. `pip install pyshanb` 或 `git clone https://github.com/mozillazg/PyShanb` ；
 2. 配置用户名及密码（通过配置文件（pyshanb.conf）或命令行参数（-u -p））；
 3. 命令行下执行：`python pyshanb.py`（Tips：使用过程中输入 `q` 即可退出程序）。
+4. 或 `shanbay -u username -p password`
 
 ### 命令行参数
 
-    >python pyshanb.py --help
-    Usage: pyshanb.py [-s SETTINGS] [-u USERNAME] [-p PASSWORD]
+    >shanbay --hlep
+    Usage: shanbay-script.py [-s SETTINGS] [-u USERNAME] [-p PASSWORD]
                     [-e | -E] [-i | -I] [-a | -A] [--version]
 
     Options:

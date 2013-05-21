@@ -7,7 +7,7 @@ PyShanb - 命令行下的扇贝词典
 
 
 __title__ = 'pyshanb'
-__version_info__ = (0, 5, 1, 'final', 0)
+__version_info__ = (0, 5, 2, 'final', 0)
 __author__ = 'mozillazg'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2013 mozillazg'

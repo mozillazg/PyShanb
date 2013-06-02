@@ -13,8 +13,9 @@ class CmdOption(object):
     def __init__(self):
         usage = 'usage: %prog [-s SETTINGS] [-u USERNAME] [-p PASSWORD]\n'
         usage += ' '*18 + '[-e | -E] [-i | -I] [-a | -A] [--version]'
-        version = 'PyShanb %s' % '.'.join(map(str, __version__))
-        parser = OptionParser(usage=usage, version=version)
+        version = 'PyShanb %s' % __version__
+        description = 'An command line tool for shanbay.com.'
+        parser = OptionParser(usage=usage, version=version, description=description)
         parser.add_option('-s', '--settings', dest='settings',
                           help='The settings file of the application.',
                           metavar='SETTINGS', default='pyshanb.conf')
@@ -38,7 +39,7 @@ class CmdOption(object):
         parser.add_option('-A', action='store_false', dest='auto_play',
                           help='Disable "Auto play audio" feature.')
 
-        (self.options, self.args) = parser.parse_args()
+        self.options, self.args = parser.parse_args()
 
 
 def main():

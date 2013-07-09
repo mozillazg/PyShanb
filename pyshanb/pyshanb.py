@@ -12,6 +12,7 @@ from urllib2 import quote
 import tempfile
 import os
 import time
+from getpass import getpass
 
 from cmdoption import CmdOption
 from conf import Settings
@@ -31,7 +32,6 @@ def download_audio(url_audio, headers, host=None, cookies=None, refere=None):
     r_audio = requests.get(url_audio, headers=headers_d, cookies=cookies,
                            stream=True)
     if r_audio.status_code != requests.codes.ok:
-        # raise r_audio.raise_for_status()
         return None
     else:
         return r_audio.content
@@ -62,11 +62,17 @@ def main():
     ask_add_example = options.ask_add_example
     enable_iciba = options.enable_iciba
     auto_play = options.auto_play
-    
+
     if configfile:
         configfile = os.path.realpath(configfile)
 
-    conf = Settings(configfile, username, password).settings
+    if password is None:
+        conf = Settings(configfile, username, '').settings
+        password = conf.password
+        if not password:
+            password = getpass('Please input password: ')
+    else:
+        conf = Settings(configfile, username, password).settings
     site = conf.site
     username = username or conf.username
     password = password or conf.password
@@ -86,7 +92,7 @@ def main():
     ask_add = conf.ask_add  # 询问是否保存单词
     enable_en_definition = conf.enable_en_definition  # 单词英文释义
     enable_example = conf.enable_example  # 用户自己添加的单词例句
-    
+
     if ask_add_example is None:
         ask_add_example = conf.ask_add_example  # 询问是否添加例句
 

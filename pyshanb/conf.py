@@ -7,13 +7,14 @@ import sys
 
 
 class Settings(object):
-    def __init__(self, configfile='pyshanb.conf', username='', password=''):
+    def __init__(self, configfile='pyshanb.conf',
+                 username=None, password=None):
         self.config_file = configfile  # 配置文件名称
         self.configs = ConfigParser.RawConfigParser()
         # 读取配置文件。
         self.configs.read(self.config_file)
-        self.has_username = username
-        self.has_password = password
+        self.has_username = username is not None
+        self.has_password = password is not None
 
         # 如果没有配置文件或没有用户名及密码的配置项
         # 则创建默认配置文件
@@ -21,12 +22,7 @@ class Settings(object):
                 and self.configs.has_section('General')
                 and self.configs.has_option('General', 'username')
                 and self.configs.has_option('General', 'password')):
-            self.default_config(username, password)
-
-    @property
-    def settings(self):
-        self.get_settings(self.has_username, self.has_password)
-        return self
+            self.default_config(username or '', password or '')
 
     def default_config(self, username='', password=''):
         """设置默认配置
@@ -61,7 +57,8 @@ class Settings(object):
         except:
             return default
 
-    def get_settings(self, has_username=False, has_password=False):
+    @property
+    def settings(self):
         """获取配置文件中相关选项的值
         """
         configs = self.configs
@@ -70,13 +67,13 @@ class Settings(object):
         # 用户名及密码
         self.username = configs.get('General', 'username')
         self.password = configs.get('General', 'password')
-        if not ((self.username or has_username)
-                and (self.password or has_password)):
-                a = u'Please configure your username and/or password,\n'
+        if not ((self.has_username or self.username)
+                and (self.has_password or self.password)):
+                a = u'\nPlease configure your username and/or password,\n'
                 b = 'or command line option, like below:\n'
                 b += '    shanbay -u username -p password\n'
                 b += '    python pyshanb.py -u username -p password\n'
-                sys.exit(u'%sby editor config file:\n    %s\n%s'
+                sys.exit(u'%sby edit config file:\n    %s\n%s'
                          % (a, os.path.realpath(CONFIGFILE), b))
 
         # 其他非必需项。如果未配置相关选项则使用默认值
@@ -121,6 +118,8 @@ class Settings(object):
         self.api_get_example = '/api/learning/examples/%s'
         self.api_get_user_info = '/api/user/info/'
         self.api_add_example = '/api/example/add/%s?sentence=%s&translation=%s'
+
+        return self
 
 
 def main():

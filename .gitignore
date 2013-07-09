@@ -3,3 +3,5 @@
 *.pyc
 dist
 pyshanb.egg-info
+.env
+*~

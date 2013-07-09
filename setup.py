@@ -19,12 +19,16 @@ requirements = [
     'requests>=1.1.0'
 ]
 
+if sys.version_info[:2] < (2, 7):
+    requirements.append('argparse')
+
 packages = [
     'pyshanb',
 ]
 
+
 def long_description():
-    md =open('README.md').read() + '\n\n' + open('ChangeLog.md').read()
+    md = open('README.md').read() + '\n\n' + open('ChangeLog.md').read()
     return md
 
 setup(

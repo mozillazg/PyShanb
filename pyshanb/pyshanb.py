@@ -67,7 +67,7 @@ def main():
         configfile = os.path.realpath(configfile)
 
     if password is None:
-        conf = Settings(configfile, username, 'passwd').settings
+        conf = Settings(configfile, username, '').settings
         password = conf.password
         if not password:
             password = getpass('Please input password: ')

@@ -7,7 +7,7 @@
         $ shanbay -uroot
         Please input password:
         Login...
-* 使用使用 argparse 代替 optparse 处理命令行参数
+* 使用 argparse 代替 optparse 处理命令行参数
 * 修复 --version 输出的版本信息有问题的 bug ，--help 添加描述信息
 
 

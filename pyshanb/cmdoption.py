@@ -24,10 +24,10 @@ class CmdOption(object):
                             metavar='SETTINGS', default='pyshanb.conf')
         parser.add_argument('-u', '--username', dest='username',
                             help='The account username of shanbay.com.',
-                            metavar='USERNAME', default='')
+                            metavar='USERNAME')
         parser.add_argument('-p', '--password', dest='password',
                             help='The account password of shanbay.com.',
-                            metavar='PASSWORD', default='')
+                            metavar='PASSWORD')
 
         group_example = parser.add_mutually_exclusive_group()
         group_example.add_argument('-e', action='store_true',

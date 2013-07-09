@@ -70,13 +70,13 @@ class Settings(object):
         # 用户名及密码
         self.username = configs.get('General', 'username')
         self.password = configs.get('General', 'password')
-        if not ((self.username or has_username)
-                and (self.password or has_password)):
+        if not ((has_username or self.username)
+                and (has_password or self.password)):
                 a = u'Please configure your username and/or password,\n'
                 b = 'or command line option, like below:\n'
                 b += '    shanbay -u username -p password\n'
                 b += '    python pyshanb.py -u username -p password\n'
-                sys.exit(u'%sby editor config file:\n    %s\n%s'
+                sys.exit(u'%sby edit config file:\n    %s\n%s'
                          % (a, os.path.realpath(CONFIGFILE), b))
 
         # 其他非必需项。如果未配置相关选项则使用默认值

@@ -269,18 +269,18 @@ def main():
 
                 while not sentence:
                     sentence = raw_input('Please input sentence:\n')
-                    if sentence.strip(' \n').lower() == 'q':
+                    if sentence.strip().lower() == 'q':
                         sentence = None
                         break
                 if sentence:
                     while not translation:
                         translation = raw_input('Please input translation:\n')
-                        if translation.strip(' \n').lower() == 'q':
+                        if translation.strip('').lower() == 'q':
                             translation = None
                             break
                 if sentence and translation:
-                    sentence = sentence.strip(' \n')
-                    translation = translation.strip(' \n')
+                    sentence = sentence.strip('')
+                    translation = translation.strip('')
                     encoding = sys.stdin.encoding
                     translation = translation.decode(encoding).encode('utf8')
 

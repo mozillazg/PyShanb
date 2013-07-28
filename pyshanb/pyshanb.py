@@ -264,32 +264,45 @@ def main():
             ask = raw_input('Do you want to add a example for '
                             'this word? (y/n): ')
             if ask.strip().lower().startswith('y'):
-                sentence = None
-                translation = None
+                while True:  # 支持多次添加例句
+                    _break = False  # 是否跳槽循环
+                    sentence = None
+                    translation = None
 
-                while not sentence:
-                    sentence = raw_input('Please input sentence:\n')
-                    if sentence.strip(' \n').lower() == 'q':
-                        sentence = None
-                        break
-                if sentence:
-                    while not translation:
-                        translation = raw_input('Please input translation:\n')
-                        if translation.strip(' \n').lower() == 'q':
-                            translation = None
+                    # 例句
+                    while not sentence:
+                        sentence = raw_input('Please input sentence:\n')
+                        if sentence.strip().lower() == 'q':
+                            sentence = None
+                            _break = True
                             break
-                if sentence and translation:
-                    sentence = sentence.strip(' \n')
-                    translation = translation.strip(' \n')
-                    encoding = sys.stdin.encoding
-                    translation = translation.decode(encoding).encode('utf8')
+                    if _break:
+                        break
 
-                    result = shanbay.add_example(api_add_example,
-                                                 word_learning_id,
-                                                 quote(sentence),
-                                                 quote(translation))
-                    if result.get('example_status') == 1:
-                        print 'Add success'
+                    if sentence:
+                        # 解释
+                        while not translation:
+                            translation = raw_input('Please input translation:\n')
+                            if translation.strip('').lower() == 'q':
+                                translation = None
+                                _break = True
+                                break
+                    if _break:
+                        break
+
+                    # 添加例句到扇贝网
+                    if sentence and translation:
+                        sentence = sentence.strip('')
+                        translation = translation.strip('')
+                        encoding = sys.stdin.encoding
+                        translation = translation.decode(encoding).encode('utf8')
+
+                        result = shanbay.add_example(api_add_example,
+                                                    word_learning_id,
+                                                    quote(sentence),
+                                                    quote(translation))
+                        if result.get('example_status') == 1:
+                            print 'Add success'
         else:
             pass
 

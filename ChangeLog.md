@@ -1,5 +1,9 @@
 # PyShanb changelog
 
+## 2013-07-28 0.5.4
+
+* 支持添加多个例句（输入 q 即可退出）
+
 ## 2013-07-09 0.5.3
 
 * 支持如下命令行参数形式
@@ -7,7 +11,7 @@
         $ shanbay -uroot
         Please input password:
         Login...
-* 使用使用 argparse 代替 optparse 处理命令行参数
+* 使用 argparse 代替 optparse 处理命令行参数
 * 修复 --version 输出的版本信息有问题的 bug ，--help 添加描述信息
 
 

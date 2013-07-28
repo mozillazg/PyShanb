@@ -283,7 +283,7 @@ def main():
                         # 解释
                         while not translation:
                             translation = raw_input('Please input translation:\n')
-                            if translation.strip('').lower() == 'q':
+                            if translation.strip().lower() == 'q':
                                 translation = None
                                 _break = True
                                 break
@@ -292,8 +292,8 @@ def main():
 
                     # 添加例句到扇贝网
                     if sentence and translation:
-                        sentence = sentence.strip('')
-                        translation = translation.strip('')
+                        sentence = sentence.strip()
+                        translation = translation.strip()
                         encoding = sys.stdin.encoding
                         translation = translation.decode(encoding).encode('utf8')
 

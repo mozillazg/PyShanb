@@ -5,7 +5,6 @@
 """
 
 import sys
-import requests
 import urlparse
 import copy
 from urllib2 import quote
@@ -14,6 +13,8 @@ import os
 import time
 from getpass import getpass
 
+import requests
+
 from cmdoption import CmdOption
 from conf import Settings
 from shanbay import Shanbay
@@ -21,8 +22,10 @@ from shanbay import LoginException
 
 
 def download_audio(url_audio, headers, host=None, cookies=None, refere=None):
-    """下载音频文件
+    u"""下载音频文件.
+
     返回文件内容
+
     """
     headers_d = copy.deepcopy(headers)
     headers_d.update({
@@ -282,7 +285,8 @@ def main():
                     if sentence:
                         # 解释
                         while not translation:
-                            translation = raw_input('Please input translation:\n')
+                            translation = raw_input('Please input '
+                                                    'translation:\n')
                             if translation.strip().lower() == 'q':
                                 translation = None
                                 _break = True
@@ -295,12 +299,13 @@ def main():
                         sentence = sentence.strip()
                         translation = translation.strip()
                         encoding = sys.stdin.encoding
-                        translation = translation.decode(encoding).encode('utf8')
+                        translation = translation.decode(encoding)
+                        translation = translation.encode('utf8')
 
                         result = shanbay.add_example(api_add_example,
-                                                    word_learning_id,
-                                                    quote(sentence),
-                                                    quote(translation))
+                                                     word_learning_id,
+                                                     quote(sentence),
+                                                     quote(translation))
                         if result.get('example_status') == 1:
                             print 'Add success'
         else:

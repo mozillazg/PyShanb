@@ -5,6 +5,9 @@
 PyShanb - 命令行下的扇贝词典
 """
 
+import datetime
+import os
+import subprocess
 
 __title__ = 'pyshanb'
 __version_info__ = (0, 5, 4, 'final', 0)
@@ -41,5 +44,24 @@ def get_version(version=None):
         sub = mapping[version[3]] + str(version[4])
 
     return str(main + sub)
+
+
+def get_git_changeset():
+    """Returns a numeric identifier of the latest git changeset.
+
+    The result is the UTC timestamp of the changeset in YYYYMMDDHHMMSS format.
+    This value isn't guaranteed to be unique, but collisions are very unlikely,
+    so it's sufficient for generating the development version numbers.
+    """
+    repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    git_log = subprocess.Popen('git log --pretty=format:%ct --quiet -1 HEAD',
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            shell=True, cwd=repo_dir, universal_newlines=True)
+    timestamp = git_log.communicate()[0]
+    try:
+        timestamp = datetime.datetime.utcfromtimestamp(int(timestamp))
+    except ValueError:
+        return None
+    return timestamp.strftime('%Y%m%d%H%M%S')
 
 __version__ = get_version(__version_info__)

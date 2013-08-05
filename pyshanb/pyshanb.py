@@ -129,7 +129,7 @@ def main():
     print u'Welcome! %s.' % user_info.get('nickname')
 
     while True:
-        word = quote(raw_input(u'Please input a english word: ').strip())
+        word = quote(raw_input(u'Please input an english word: ').strip())
         if not word:
             continue
 
@@ -141,7 +141,7 @@ def main():
         # 获取单词信息
         word_info = shanbay.get_word(api_get_word, word)
         if not word_info:
-            print u"'%s' may not be a english word!" % word
+            print u"'%s' may not be an english word!" % word
             continue
 
         # 输出单词信息
@@ -262,7 +262,7 @@ def main():
 
         # 添加例句
         if word_learning_id and ask_add_example:
-            ask = raw_input('Do you want to add a example for '
+            ask = raw_input('Do you want to add an example for '
                             'this word? (y/n): ')
             if ask.strip().lower().startswith('y'):
                 while True:  # 支持多次添加例句

@@ -55,7 +55,6 @@ storage = Storage
 
 def parse_settings():
     u"""解析各个设置项."""
-    settings = {}
     # 获取各命令行参数的值
     options = CmdOption().options
     configfile = options.settings
@@ -79,12 +78,16 @@ def parse_settings():
 
     if auto_play is None:
         auto_play = conf.auto_play  # 自动播放单词读音
-    settings['auto_play'] = auto_play
 
+    settings = {}
     # shanbay.com
     site = conf.site
+    settings['site'] = site
+    settings['username'] = username
+    settings['password'] = password
     settings['auto_add'] = conf.auto_add  # 自动保存单词到扇贝网
     settings['ask_add'] = conf.ask_add  # 询问是否保存单词
+    settings['auto_play'] = auto_play
     settings['en_definition'] = conf.enable_en_definition  # 单词英文释义
     settings['example'] = conf.enable_example  # 用户自己添加的单词例句
     settings['url_login'] = site + conf.url_login

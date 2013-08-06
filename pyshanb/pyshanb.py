@@ -145,7 +145,7 @@ def main():
 
             if any(iciba_info):
                 cmd_width_icb = 21
-                print 'iciba.com---begin'.center(cmd_width_icb, '-')
+                print '\n' + 'iciba.com---begin'.center(cmd_width_icb, '-')
                 if iciba_syllable:
                     print u'音节划分：%s' % iciba_syllable
                 if iciba_def:

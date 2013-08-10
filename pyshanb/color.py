@@ -12,9 +12,9 @@ if os.name == 'nt':
 else:
     win = False
 
-colors = ['black', 'white', 'red', 'green', 'yellow', 'blue',
-          'magenta', 'cyan', 'gray']
-styles = ['bold', 'blink', 'underline', 'reverse', 'hidden']
+COLORS = ('black', 'white', 'red', 'green', 'yellow', 'blue',
+          'magenta', 'cyan', 'gray')
+EFFECTS = ('bold', 'blink', 'underline', 'reverse', 'hidden')
 
 
 def wrapper(code):
@@ -22,14 +22,12 @@ def wrapper(code):
     code = str(code)
     return '\033[{code}m'.format(**locals())
 
-
 default = wrapper('0')
 bold = wrapper('1')
 underline = wrapper('4')
 blink = wrapper('5')
 reverse = wrapper('7')
 hidden = wrapper('8')
-
 
 # 前景色
 fore_black = wrapper('30')
@@ -55,33 +53,35 @@ back_white = wrapper('47')
 back_default = wrapper('49')
 
 
-def color(text, foreground=None, background=None, extra=None):
+def color(text, foreground=None, background=None, effect=None):
     """给文字加点颜色.
 
     :param text: 要着色的文字.
     :param foreground: 前景色即文字颜色.
     :param background: 背景色.
-    :param extra: 额外的效果.
+    :param effect: 额外的特效.
 
     """
     foreg_color = ''
     backg_color = ''
-    extra_styles = []
+    extra_effects = []
+
     if foreground:
         foreground = foreground.lower()
-        if foreground in colors:
+        if foreground in COLORS:
             foreg_color = globals()['fore_' + foreground]
     if background:
         background = background.lower()
-        if background in colors:
+        if background in COLORS:
             backg_color = globals()['back_' + background]
-    if win:
-        extra = False
-    if extra:
-        extras = [x.strip() for x in extra.split(',')]
-        for x in extras:
-            if x in styles:
-                extra_styles.append(globals()[x])
-    codes = foreg_color + backg_color + ''.join(extra_styles)
+    if effect:
+        effect = effect.lower()
+        # windows 下只支持 bold
+        if win and effect != 'bold':
+            effect = ''
+        effects = [x.strip() for x in effect.split(',')]
+        for x in effects:
+            if x in EFFECTS:
+                extra_effects.append(globals()[x])
+    codes = foreg_color + backg_color + ''.join(extra_effects)
     return codes + text + default
-

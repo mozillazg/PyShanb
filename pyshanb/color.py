@@ -3,14 +3,17 @@
 
 """给文字加点颜色."""
 
+import sys
+reload(sys)
+sys.setdefaultencoding(sys.stdout.encoding)
 import os
-
 if os.name == 'nt':
     from colorama import init
     init()
     win = True
 else:
     win = False
+
 
 COLORS = ('black', 'white', 'red', 'green', 'yellow', 'blue',
           'magenta', 'cyan', 'gray')

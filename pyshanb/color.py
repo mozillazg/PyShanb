@@ -76,12 +76,12 @@ def color(text, foreground=None, background=None, effect=None):
             backg_color = globals()['back_' + background]
     if effect:
         effect = effect.lower()
-        # windows 下只支持 bold
-        if win and effect != 'bold':
-            effect = ''
         effects = [x.strip() for x in effect.split(',')]
         for x in effects:
             if x in EFFECTS:
+                # windows 下只支持 bold
+                if win and x != 'bold':
+                    continue
                 extra_effects.append(globals()[x])
     codes = foreg_color + backg_color + ''.join(extra_effects)
     return codes + text + default

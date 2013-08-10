@@ -17,6 +17,7 @@ import requests
 from shanbay import Shanbay
 from shanbay import LoginException
 from utils import parse_settings
+from color import color
 
 
 def download_audio(url_audio, headers, host=None, cookies=None, referer=None):
@@ -38,27 +39,23 @@ def download_audio(url_audio, headers, host=None, cookies=None, referer=None):
         return r_audio.content
 
 
-def iciba_info():
-    u"""输出爱词霸上的单词信息."""
-    pass
-
-
 def check_error(func):
     u"""使用装饰器（decorator）处理异常."""
     def check(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except LoginException:
-            sys.exit('Login failed!')
+            sys.exit(color('Login failed!', 'red', effect='blink'))
         except requests.exceptions.RequestException:
-            sys.exit('Network trouble!')
+            sys.exit(color('Network trouble!', 'red', effect='blink'))
     return check
 
 
 @check_error
 def main():
     if sys.version_info[0] == 3:
-        sys.exit("Sorry, this program doesn't support Python 3 yet")
+        sys.exit(color("Sorry, this program doesn't support Python 3 yet",
+                       'red', effect='blink'))
     settings = parse_settings()
 
     if settings.iciba:
@@ -83,7 +80,7 @@ def main():
     shanbay = Shanbay(settings.url_login, headers, settings.username,
                       settings.password)
     user_info = shanbay.get_user_info(settings.api_get_user_info)
-    print u'Welcome! %s.' % user_info.get('nickname')
+    print 'Welcome! %s.' % color(user_info.get('nickname'), 'green')
 
     while True:
         word = quote(raw_input('Please input an english word: ').strip())
@@ -98,7 +95,7 @@ def main():
         # 获取单词信息
         info = shanbay.get_word(settings.api_get_word, word)
         if not info:
-            print "'%s' may not be an english word!" % word
+            print "%s may not be an english word!" % color(word, 'green')
             continue
 
         # 输出单词信息
@@ -106,32 +103,33 @@ def main():
         learning_id = info.get('learning_id')
         voc = info.get('voc')
         if not voc:
-            print "'%s' may not be an english word!" % word
+            print "%s may not be an english word!" % color(word, 'green')
             continue
         # 单词本身
         word = voc.get('content')
         # 音标
-        # pron = voc.get(u'pron')
+        # pron = voc.get('pron')
         # 音频文件
         audio_url = voc.get('audio')
         # 英文解释
         en_definitions = voc.get('en_definitions')
         if en_definitions:
-            en_definition = [u'%s. %s' % (p, ','.join(d))
+            en_definition = ['%s. %s' % (p, ','.join(d))
                              for p, d in en_definitions.iteritems()]
         else:
             en_definition = None
         # 中文解释
         cn_definition = voc.get('definition')
 
-        # print u'%s [%s]' % (word, pron)
-        print ' %s '.center(cmd_width, '-') % word
-        print u'%s' % (cn_definition)
+        # print '%s [%s]' % (word, pron)
+        print ' %s '.center(cmd_width, '-') % color(word, 'green',
+                                                    effect='blink')
+        print '%s' % cn_definition.strip()
 
         if settings.en_definition and en_definition:
-            print u'\nEnglish definition:'
+            print '\nEnglish definition:'
             for en in en_definition:
-                print u'%s' % (en)
+                print '%s' % en.strip()
 
         # iciba
         if settings.iciba:
@@ -144,8 +142,9 @@ def main():
             iciba_syllable, iciba_audio, iciba_def, iciba_extra = iciba_info
 
             if any(iciba_info):
-                cmd_width_icb = 21
-                print '\n' + 'iciba.com---begin'.center(cmd_width_icb, '-')
+                cmd_width_icb = 30
+                print '\n' + 'iciba.com- %s --begin'.center(
+                    cmd_width_icb, '-') % color(word, 'green', effect='blink')
                 if iciba_syllable:
                     print u'音节划分：%s' % iciba_syllable
                 if iciba_def:
@@ -157,7 +156,7 @@ def main():
                     print iciba_extra
                 if iciba_audio:
                     audio_url = iciba_audio
-                print u'iciba.com---end'.center(cmd_width_icb, '-')
+                print 'iciba.com------end'.center(cmd_width_icb, '-')
 
         try:
             if settings.auto_play:
@@ -188,32 +187,37 @@ def main():
             examples_info = shanbay.get_example(settings.api_get_example,
                                                 learning_id)
             if examples_info:
-                examples_dict = examples_info.get(u'examples')
+                examples_dict = examples_info.get('examples')
                 for example_dict in examples_dict:
-                    examples.append(u'%(first)s*%(mid)s*%(last)s'
-                                    u'\n%(translation)s' % example_dict)
+                    #examples.append('%(first)s*%(mid)s*%(last)s'
+                                    #'\n%(translation)s' % example_dict)
+                    examples.append(
+                        example_dict['first'] +
+                        color(example_dict['mid'], 'green') +
+                        '%(last)s\n%(translation)s' % example_dict
+                    )
 
         if examples:
-            print u'\nExamples:'
+            print '\nExamples:'
             for ex in examples:
-                print u'%s' % (ex)
+                print '%s' % ex.strip()
 
         # 如果未收藏该单词
         if not learning_id:
             if settings.ask_add:
-                ask = raw_input('Do you want to add '
-                                '"%s" to shanbay.com? (y/n): ' % word)
+                ask = raw_input('Do you want to add %s to shanbay.com?'
+                                ' (y/n): ' % color(word, 'green'))
                 if ask.strip().lower().startswith('y'):
                     # 收藏单词
                     learning_id_info = shanbay.add_word(settings.api_add_word,
                                                         word)
                     learning_id = learning_id_info.get('id')
-                    print '"%s" has been added to shanbay.com' % word
+                    print '%s has been added to shanbay.com' % color(word,
+                                                                     'green')
             elif settings.auto_add:
-                learning_id_info = shanbay.add_word(settings.api_add_word,
-                                                    word)
+                learning_id_info = shanbay.add_word(settings.api_add_word, word)
                 learning_id = learning_id_info.get('id')
-                print '"%s" has been added to shanbay.com' % word
+                print '%s has been added to shanbay.com' % color(word, 'green')
 
         # 添加例句
         if learning_id and settings.ask_example:

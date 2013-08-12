@@ -20,36 +20,42 @@ class CmdOption(object):
         parser.add_argument('-V', '--version', action='version',
                             version=version)
         parser.add_argument('-s', '--settings', dest='settings',
-                            help='The settings file of the application.',
+                            help='the settings file of the application',
                             metavar='SETTINGS', default='pyshanb.conf')
         parser.add_argument('-u', '--username', dest='username',
-                            help='The account username of shanbay.com.',
+                            help='the account username of shanbay.com',
                             metavar='USERNAME')
         parser.add_argument('-p', '--password', dest='password',
-                            help='The account password of shanbay.com.',
+                            help='the account password of shanbay.com',
                             metavar='PASSWORD')
 
         group_example = parser.add_mutually_exclusive_group()
         group_example.add_argument('-e', action='store_true',
                                    dest='ask_add_example',
-                                   help='Enable "Add example" feature.')
+                                   help='enable "Add example" feature')
         group_example.add_argument('-E', action='store_false',
                                    dest='ask_add_example',
-                                   help='Disable "Add example" feature.')
+                                   help='disable "Add example" feature')
 
         group_iciba = parser.add_mutually_exclusive_group()
         group_iciba.add_argument('-i', action='store_true',
                                  dest='enable_iciba',
-                                 help='Enable "Get data from iciba.com" feature.')
+                                 help='enable "Get data from iciba.com" feature')
         group_iciba.add_argument('-I', action='store_false',
                                  dest='enable_iciba',
-                                 help='Disable "Get data from iciba.com" feature.')
+                                 help='disable "Get data from iciba.com" feature')
 
         group_audio = parser.add_mutually_exclusive_group()
         group_audio.add_argument('-a', action='store_true', dest='auto_play',
-                                 help='Enable "Auto play audio" feature.')
+                                 help='enable "Auto play audio" feature')
         group_audio.add_argument('-A', action='store_false', dest='auto_play',
-                                 help='Disable "Auto play audio" feature.')
+                                 help='disable "Auto play audio" feature')
+
+        parser.add_argument('--color', dest='colour',
+                            help='colorize keyword (default: green). '
+                            'COLOR may be "black", "white", "red", "green", '
+                            '"yellow", "blue", "magenta", "cyan", or "gray"',
+                            metavar='COLOR', default='green')
 
         self.options = parser.parse_args()
 

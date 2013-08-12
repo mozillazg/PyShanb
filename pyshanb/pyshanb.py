@@ -57,6 +57,7 @@ def main():
         sys.exit(color("Sorry, this program doesn't support Python 3 yet",
                        'red', effect='blink'))
     settings = parse_settings()
+    colour = settings.colour
 
     if settings.iciba:
         from iciba import Lciba as iciba_
@@ -80,7 +81,7 @@ def main():
     shanbay = Shanbay(settings.url_login, headers, settings.username,
                       settings.password)
     user_info = shanbay.get_user_info(settings.api_get_user_info)
-    print 'Welcome! %s.' % color(user_info.get('nickname'), 'green')
+    print 'Welcome! %s.' % color(user_info.get('nickname'), colour)
 
     while True:
         word = quote(raw_input('Please input an english word: ').strip())
@@ -95,7 +96,7 @@ def main():
         # 获取单词信息
         info = shanbay.get_word(settings.api_get_word, word)
         if not info:
-            print "%s may not be an english word!" % color(word, 'green')
+            print "%s may not be an english word!" % color(word, colour)
             continue
 
         # 输出单词信息
@@ -103,7 +104,7 @@ def main():
         learning_id = info.get('learning_id')
         voc = info.get('voc')
         if not voc:
-            print "%s may not be an english word!" % color(word, 'green')
+            print "%s may not be an english word!" % color(word, colour)
             continue
         # 单词本身
         word = voc.get('content')
@@ -122,7 +123,7 @@ def main():
         cn_definition = voc.get('definition')
 
         # print '%s [%s]' % (word, pron)
-        print ' %s '.center(cmd_width, '-') % color(word, 'green',
+        print ' %s '.center(cmd_width, '-') % color(word, colour,
                                                     effect='blink')
         print '%s' % cn_definition.strip()
 
@@ -144,7 +145,7 @@ def main():
             if any(iciba_info):
                 cmd_width_icb = 30
                 print '\n' + 'iciba.com- %s --begin'.center(
-                    cmd_width_icb, '-') % color(word, 'green', effect='blink')
+                    cmd_width_icb, '-') % color(word, colour, effect='blink')
                 if iciba_syllable:
                     print u'音节划分：%s' % iciba_syllable
                 if iciba_def:
@@ -193,7 +194,7 @@ def main():
                                     #'\n%(translation)s' % example_dict)
                     examples.append(
                         example_dict['first'] +
-                        color(example_dict['mid'], 'green') +
+                        color(example_dict['mid'], colour) +
                         '%(last)s\n%(translation)s' % example_dict
                     )
 
@@ -206,18 +207,19 @@ def main():
         if not learning_id:
             if settings.ask_add:
                 ask = raw_input('Do you want to add %s to shanbay.com?'
-                                ' (y/n): ' % color(word, 'green'))
+                                ' (y/n): ' % color(word, colour))
                 if ask.strip().lower().startswith('y'):
                     # 收藏单词
                     learning_id_info = shanbay.add_word(settings.api_add_word,
                                                         word)
                     learning_id = learning_id_info.get('id')
                     print '%s has been added to shanbay.com' % color(word,
-                                                                     'green')
+                                                                     colour)
             elif settings.auto_add:
-                learning_id_info = shanbay.add_word(settings.api_add_word, word)
+                learning_id_info = shanbay.add_word(settings.api_add_word,
+                                                    word)
                 learning_id = learning_id_info.get('id')
-                print '%s has been added to shanbay.com' % color(word, 'green')
+                print '%s has been added to shanbay.com' % color(word, colour)
 
         # 添加例句
         if learning_id and settings.ask_example:

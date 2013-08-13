@@ -1,6 +1,5 @@
 # PyShanb TODO
 
-* 颜色高亮单词
 * 支持 Python3
 * 长文本换行
 * 转换 mp3 格式的读音文件为 ogg 格式

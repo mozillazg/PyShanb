@@ -1,7 +1,12 @@
 # PyShanb：命令行下的扇贝词典
 
+[![Build](https://api.travis-ci.org/mozillazg/PyShanb.png?branch=master)](http://travis-ci.org/mozillazg/PyShanb)
+<!--[![Coverage](https://coveralls.io/repos/mozillazg/PyShanb/badge.png?branch=master)](https://coveralls.io/repos/mozillazg/Pyshanb/badge.png?branch=master)-->
+[![Pypi version](https://pypip.in/v/pyshanb/badge.png)](https://crate.io/package/pyshanb)
+[![Downloads](https://pypip.in/d/pyshanb/badge.png)](https://crate.io/package/pyshanb)
+
 基于 [扇贝网 API v0.8](http://www.shanbay.com/support/dev/api.html "扇贝网 API v0.8") 开发的一个命令行下的查词工具。
-支持将生词添加到扇贝网的个人词库中。
+
 
 ## 功能
 

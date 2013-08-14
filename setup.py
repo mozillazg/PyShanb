@@ -21,6 +21,8 @@ requirements = [
 
 if sys.version_info[:2] < (2, 7):
     requirements.append('argparse')
+if sys.platform == 'win32':
+    requirements.extend(['mp3play', 'colorama'])
 
 packages = [
     'pyshanb',
@@ -28,7 +30,7 @@ packages = [
 
 
 def long_description():
-    md = open('README.md').read() + '\n\n' + open('ChangeLog.md').read()
+    md = open('README.rst').read() + '\n\n' + open('CHANGELOG.rst').read()
     return md
 
 setup(
@@ -55,12 +57,17 @@ setup(
     },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
         'Environment :: Console',
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
         'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 2 :: Only',
+        'Topic :: Terminals',
+        'Topic :: Text Processing',
+        'Topic :: Utilities',
     ],
 )

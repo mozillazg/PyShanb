@@ -21,7 +21,7 @@ requirements = [
 
 if sys.version_info[:2] < (2, 7):
     requirements.append('argparse')
-if os.name == 'nt':
+if sys.platform == 'win32':
     requirements.extend(['mp3play', 'colorama'])
 
 packages = [

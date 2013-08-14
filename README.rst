@@ -1,7 +1,7 @@
 PyShanb：命令行下的扇贝词典
 ===========================
 
-|Build| |Pypi version| |Downloads|
+|Build| |Pypi version| |Pypi downloads|
 
 基于 `扇贝网 API v0.8 <http://www.shanbay.com/support/dev/api.html>`__
 开发的一个命令行下的查词工具。
@@ -9,36 +9,28 @@ PyShanb：命令行下的扇贝词典
 功能
 ----
 
--  自动登录扇贝网（需要配置用户名及密码）
--  显示单词中文释义
--  显示单词英文释义（可选，默认禁用）
--  自动发音（Windows only）（可选，默认禁用）
--  自动添加单词到扇贝网词库（当天待背单词列表）（可选，默认禁用）
--  询问是否添加单词到扇贝网词库（可选，默认启用）
--  显示例句（显示用户在扇贝网添加的例句）（可选，默认禁用）
--  配置文件（配置用户名、密码及其他功能项）
--  从爱词霸网获取单词信息（可选，默认禁用）
--  通过命令行参数指定配置文件、用户名及密码
--  登录后显示用户昵称
--  添加单词例句（可选，默认启用）
+-  自动登录扇贝网（需要配置用户名及密码）;
+-  显示单词中文释义;
+-  显示单词英文释义（可选，默认禁用）;
+-  自动发音（Windows only）（可选，默认禁用）;
+-  自动添加单词到扇贝网词库（当天待背单词列表）（可选，默认禁用）;
+-  询问是否添加单词到扇贝网词库（可选，默认启用）;
+-  显示例句（显示用户在扇贝网添加的例句）（可选，默认禁用）;
+-  配置文件（配置用户名、密码及其他功能项）;
+-  从爱词霸网获取单词信息（可选，默认禁用）;
+-  通过命令行参数指定配置文件、用户名及密码等;
+-  登录后显示用户昵称;
+-  添加单词例句（可选，默认启用）;
+-  高亮单词及错误信息。
 
-依赖
-----
-
--  `python 2.6 or 2.7 <http://www.python.org/>`__
--  `requests <https://github.com/kennethreitz/requests>`__
--  `mp3play(windows only，可选) <https://code.google.com/p/mp3play/>`__
 
 安装使用
 --------
 
-1. ``pip install pyshanb`` 或
-   ``git clone https://github.com/mozillazg/PyShanb`` ；
-2. 配置用户名及密码（通过配置文件（pyshanb.conf）或命令行参数（-u
-   -p））；
-3. 命令行下执行：\ ``python pyshanb.py``\ （Tips：使用过程中输入 ``q``
+1. ``pip install pyshanb`` ；
+2. 命令行下执行：\ ``shanbay -u username``\ （Tips：使用过程中输入 ``q``
    即可退出程序）。
-4. 或 ``shanbay -u username -p password``
+
 
 命令行参数
 ~~~~~~~~~~
@@ -46,28 +38,39 @@ PyShanb：命令行下的扇贝词典
 ::
 
     >shanbay --hlep
-    Usage: shanbay-script.py [-s SETTINGS] [-u USERNAME] [-p PASSWORD]
-                    [-e | -E] [-i | -I] [-a | -A] [--version]
+    usage: shanbay-script.py [-h] [-V] [-s SETTINGS] [-u USERNAME] [-p PASSWORD]
+                         [-e | -E] [-i | -I] [-a | -A] [--color COLOR]
 
-    Options:
-    --version             show program's version number and exit
-    -h, --help            show this help message and exit
-    -s SETTINGS, --settings=SETTINGS
-                          The settings file of the application.
-    -u USERNAME, --username=USERNAME
-                          The username of shanbay.com.
-    -p PASSWORD, --password=PASSWORD
-                          The password of shanbay.com.
-    -e                    Enable "Add example" feature.
-    -E                    Disable "Add example" feature.
-    -i                    Enable "Get data from iciba.com" feature.
-    -I                    Disable "Get data from iciba.com" feature.
-    -a                    Enable "Auto play audio" feature.
-    -A                    Disable "Auto play audio" feature.
+    An command line tool for shanbay.com.
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -V, --version         show program's version number and exit
+      -s SETTINGS, --settings SETTINGS
+                            the settings file of the application
+      -u USERNAME, --username USERNAME
+                            the account username of shanbay.com
+      -p PASSWORD, --password PASSWORD
+                            the account password of shanbay.com
+      -e                    enable "Add example" feature
+      -E                    disable "Add example" feature
+      -i                    enable "Get data from iciba.com" feature
+      -I                    disable "Get data from iciba.com" feature
+      -a                    enable "Auto play audio" feature
+      -A                    disable "Auto play audio" feature
+      --color COLOR         colorize keyword (default: green). COLOR may be
+                            "black", "white", "red", "green", "yellow", "blue",
+                            "magenta", "cyan", or "gray"
 
 .. |Build| image:: https://api.travis-ci.org/mozillazg/PyShanb.png?branch=master
    :target: http://travis-ci.org/mozillazg/PyShanb
 .. |Pypi version| image:: https://pypip.in/v/pyshanb/badge.png
    :target: https://crate.io/package/pyshanb
-.. |Downloads| image:: https://pypip.in/d/pyshanb/badge.png
+.. |Pypi downloads| image:: https://pypip.in/d/pyshanb/badge.png
    :target: https://crate.io/package/pyshanb
+
+
+License
+-------
+
+Licensed under the `MIT License <http://en.wikipedia.org/wiki/MIT_License>`__.

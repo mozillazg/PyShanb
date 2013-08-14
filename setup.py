@@ -30,7 +30,7 @@ packages = [
 
 
 def long_description():
-    md = open('README.md').read() + '\n\n' + open('ChangeLog.md').read()
+    md = open('README.rst').read() + '\n\n' + open('CHANGELOG.rst').read()
     return md
 
 setup(

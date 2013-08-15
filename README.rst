@@ -65,9 +65,9 @@ PyShanb：命令行下的扇贝词典
 .. |Build| image:: https://api.travis-ci.org/mozillazg/PyShanb.png?branch=master
    :target: http://travis-ci.org/mozillazg/PyShanb
 .. |Pypi version| image:: https://pypip.in/v/pyshanb/badge.png
-   :target: https://crate.io/package/pyshanb
+   :target: https://crate.io/packages/pyshanb
 .. |Pypi downloads| image:: https://pypip.in/d/pyshanb/badge.png
-   :target: https://crate.io/package/pyshanb
+   :target: https://crate.io/packages/pyshanb
 
 
 License

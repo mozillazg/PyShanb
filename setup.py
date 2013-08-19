@@ -3,6 +3,7 @@
 
 import os
 import sys
+from shutil import copy
 
 import pyshanb
 
@@ -21,11 +22,21 @@ requirements = [
 
 if sys.version_info[:2] < (2, 7):
     requirements.append('argparse')
+
 if sys.platform == 'win32':
+    home = os.environ['userprofile']
     requirements.extend(['mp3play', 'colorama'])
+else:
+    home = os.environ['home']
+
+# copy setting file to home directory.
+current_dir = os.path.dirname(os.path.realpath(__file__))
+if not os.path.exists(os.path.join(home, 'pyshanb.conf')):
+    copy(os.path.join(current_dir, 'pyshanb.conf'), home)
 
 packages = [
     'pyshanb',
+    'pyshanb.utils',
 ]
 
 
@@ -44,7 +55,7 @@ setup(
     author_email='mozillazg101@gmail.com',
     license=pyshanb.__license__,
     packages=packages,
-    package_data={'': ['LICENSE.txt'], 'pyshanb': ['*.conf']},
+    package_data={'': ['LICENSE.txt', '*.conf']},
     package_dir={'pyshanb': 'pyshanb'},
     include_package_data=True,
     install_requires=requirements,

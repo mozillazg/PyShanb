@@ -5,8 +5,16 @@
 处理命令行参数
 """
 
+import os
 from argparse import ArgumentParser
 from __init__ import __version__
+
+
+if os.name == 'nt':
+    home = os.environ['userprofile']
+else:
+    home = os.environ['home']
+configfile = os.path.join(home, 'pyshanb.conf')
 
 
 class CmdOption(object):
@@ -21,7 +29,7 @@ class CmdOption(object):
                             version=version)
         parser.add_argument('-s', '--settings', dest='settings',
                             help='the settings file of the application',
-                            metavar='SETTINGS', default='pyshanb.conf')
+                            metavar='SETTINGS', default=configfile)
         parser.add_argument('-u', '--username', dest='username',
                             help='the account username of shanbay.com',
                             metavar='USERNAME')

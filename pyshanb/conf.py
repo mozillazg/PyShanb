@@ -7,8 +7,13 @@ import sys
 
 
 class Settings(object):
-    def __init__(self, configfile='pyshanb.conf',
-                 username=None, password=None):
+    def __init__(self, configfile=None, username=None, password=None):
+        if configfile is None:
+            if os.name == 'nt':
+                home = os.environ['userprofile']
+            else:
+                home = os.environ['home']
+            configfile = os.path.join(home, 'pyshanb.conf')
         self.config_file = configfile  # 配置文件名称
         self.configs = ConfigParser.RawConfigParser()
         # 读取配置文件。

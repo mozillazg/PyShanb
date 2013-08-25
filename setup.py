@@ -36,7 +36,6 @@ if not os.path.exists(os.path.join(home, 'pyshanb.conf')):
 
 packages = [
     'pyshanb',
-    'pyshanb.utils',
 ]
 
 

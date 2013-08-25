@@ -48,16 +48,20 @@ class CmdOption(object):
         group_iciba = parser.add_mutually_exclusive_group()
         group_iciba.add_argument('-i', action='store_true',
                                  dest='enable_iciba',
-                                 help='enable "Get data from iciba.com" feature')
+                                 help='enable "Get data from iciba.com" '
+                                 'feature', default=None)
         group_iciba.add_argument('-I', action='store_false',
                                  dest='enable_iciba',
-                                 help='disable "Get data from iciba.com" feature')
+                                 help='disable "Get data from iciba.com" '
+                                 'feature', default=None)
 
         group_audio = parser.add_mutually_exclusive_group()
         group_audio.add_argument('-a', action='store_true', dest='auto_play',
-                                 help='enable "Auto play audio" feature')
+                                 help='enable "Auto play audio" feature',
+                                 default=None)
         group_audio.add_argument('-A', action='store_false', dest='auto_play',
-                                 help='disable "Auto play audio" feature')
+                                 help='disable "Auto play audio" feature',
+                                 default=None)
 
         parser.add_argument('--color', dest='colour',
                             help='colorize keyword (default: green). '

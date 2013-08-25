@@ -5,16 +5,10 @@
 处理命令行参数
 """
 
-import os
 from argparse import ArgumentParser
+
 from __init__ import __version__
-
-
-if os.name == 'nt':
-    home = os.environ['userprofile']
-else:
-    home = os.environ['home']
-configfile = os.path.join(home, 'pyshanb.conf')
+from helper import default_configfile
 
 
 class CmdOption(object):
@@ -23,21 +17,19 @@ class CmdOption(object):
         # usage += ' '*18 + '[-e | -E] [-i | -I] [-a | -A] [--version]'
         version = 'PyShanb %s' % __version__
         description = 'An command line tool for shanbay.com.'
-        parser = ArgumentParser(description=description)
+        self.parser = ArgumentParser(description=description)
 
-        parser.add_argument('-V', '--version', action='version',
-                            version=version)
-        parser.add_argument('-s', '--settings', dest='settings',
-                            help='the settings file of the application',
-                            metavar='SETTINGS', default=configfile)
-        parser.add_argument('-u', '--username', dest='username',
-                            help='the account username of shanbay.com',
-                            metavar='USERNAME')
-        parser.add_argument('-p', '--password', dest='password',
-                            help='the account password of shanbay.com',
-                            metavar='PASSWORD')
+        self.parser.add_argument('-V', '--version', action='version',
+                                 version=version)
+        self.parser.add_argument('-s', '--settings', dest='settings',
+                                 help='the settings file of the application',
+                                 default=default_configfile)
+        self.parser.add_argument('-u', '--username', dest='username',
+                                 help='the account username of shanbay.com')
+        self.parser.add_argument('-p', '--password', dest='password',
+                                 help='the account password of shanbay.com')
 
-        group_example = parser.add_mutually_exclusive_group()
+        group_example = self.parser.add_mutually_exclusive_group()
         group_example.add_argument('-e', action='store_true',
                                    dest='ask_add_example',
                                    help='enable "Add example" feature')
@@ -45,7 +37,7 @@ class CmdOption(object):
                                    dest='ask_add_example',
                                    help='disable "Add example" feature')
 
-        group_iciba = parser.add_mutually_exclusive_group()
+        group_iciba = self.parser.add_mutually_exclusive_group()
         group_iciba.add_argument('-i', action='store_true',
                                  dest='enable_iciba',
                                  help='enable "Get data from iciba.com" '
@@ -55,7 +47,7 @@ class CmdOption(object):
                                  help='disable "Get data from iciba.com" '
                                  'feature', default=None)
 
-        group_audio = parser.add_mutually_exclusive_group()
+        group_audio = self.parser.add_mutually_exclusive_group()
         group_audio.add_argument('-a', action='store_true', dest='auto_play',
                                  help='enable "Auto play audio" feature',
                                  default=None)
@@ -63,16 +55,13 @@ class CmdOption(object):
                                  help='disable "Auto play audio" feature',
                                  default=None)
 
-        parser.add_argument('--color', dest='colour',
-                            choices=['black', 'white', 'red', 'green',
-                                     'yellow', 'blue', 'magenta', 'cyan',
-                                     'gray'],
-                            help='colorize keyword (default: green). '
-                            'COLOR may be "black", "white", "red", "green", '
-                            '"yellow", "blue", "magenta", "cyan", or "gray"',
-                            metavar='COLOR', default='green')
+        self.parser.add_argument('--color', dest='colour', default='green',
+                                 choices=['black', 'white', 'red', 'green',
+                                          'yellow', 'blue', 'magenta', 'cyan',
+                                          'gray'],
+                                 help='colorize keyword (default: green)')
 
-        self.options = parser.parse_args()
+        self.options = self.parser.parse_args()
 
 
 def main():

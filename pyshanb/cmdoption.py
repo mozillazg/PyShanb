@@ -64,6 +64,9 @@ class CmdOption(object):
                                  default=None)
 
         parser.add_argument('--color', dest='colour',
+                            choices=['black', 'white', 'red', 'green',
+                                     'yellow', 'blue', 'magenta', 'cyan',
+                                     'gray'],
                             help='colorize keyword (default: green). '
                             'COLOR may be "black", "white", "red", "green", '
                             '"yellow", "blue", "magenta", "cyan", or "gray"',
@@ -80,6 +83,7 @@ def main():
     print 'ask_add_example: ', options.ask_add_example
     print 'enable_iciba: ', options.enable_iciba
     print 'auto_play: ', options.auto_play
+    print 'color: ', options.colour
 
 if __name__ == '__main__':
     main()

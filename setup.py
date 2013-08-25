@@ -6,6 +6,7 @@ import sys
 from shutil import copy
 
 import pyshanb
+from pyshanb.helper import windows, home, default_configfile
 
 try:
     from setuptools import setup
@@ -23,15 +24,12 @@ requirements = [
 if sys.version_info[:2] < (2, 7):
     requirements.append('argparse')
 
-if sys.platform == 'win32':
-    home = os.environ['userprofile']
+if windows:
     requirements.extend(['mp3play', 'colorama'])
-else:
-    home = os.environ['home']
 
 # copy setting file to home directory.
 current_dir = os.path.dirname(os.path.realpath(__file__))
-if not os.path.exists(os.path.join(home, 'pyshanb.conf')):
+if not os.path.exists(default_configfile):
     copy(os.path.join(current_dir, 'pyshanb.conf'), home)
 
 packages = [

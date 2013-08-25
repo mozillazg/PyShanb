@@ -30,10 +30,10 @@ class CmdOption(object):
                                  help='the account password of shanbay.com')
 
         group_example = self.parser.add_mutually_exclusive_group()
-        group_example.add_argument('-e', action='store_true',
+        group_example.add_argument('-e', action='store_true', default=None,
                                    dest='ask_add_example',
                                    help='enable "Add example" feature')
-        group_example.add_argument('-E', action='store_false',
+        group_example.add_argument('-E', action='store_false', default=None,
                                    dest='ask_add_example',
                                    help='disable "Add example" feature')
 

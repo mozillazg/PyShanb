@@ -13,14 +13,12 @@ from helper import default_configfile
 
 class CmdOption(object):
     def __init__(self):
-        # usage = 'usage: %(prog)s [-s SETTINGS] [-u USERNAME] [-p PASSWORD]\n'
-        # usage += ' '*18 + '[-e | -E] [-i | -I] [-a | -A] [--version]'
-        version = 'PyShanb %s' % __version__
+        self.version = 'PyShanb %s' % __version__
         description = 'An command line tool for shanbay.com.'
         self.parser = ArgumentParser(description=description)
 
         self.parser.add_argument('-V', '--version', action='version',
-                                 version=version)
+                                 version=self.version)
         self.parser.add_argument('-s', '--settings', dest='settings',
                                  help='the settings file of the application',
                                  default=default_configfile)

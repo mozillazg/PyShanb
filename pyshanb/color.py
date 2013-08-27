@@ -23,12 +23,12 @@ def wrapper(code):
     code = str(code)
     return '\033[{code}m'.format(**locals())
 
-default = wrapper('0')
-bold = wrapper('1')
-underline = wrapper('4')
-blink = wrapper('5')
-reverse = wrapper('7')
-hidden = wrapper('8')
+default = wrapper('0')    # 默认效果
+bold = wrapper('1')       # 粗体
+underline = wrapper('4')  # 下划线
+blink = wrapper('5')      # 闪烁
+reverse = wrapper('7')    # 调换前景色和背景色
+hidden = wrapper('8')     # 隐藏
 
 # 前景色
 fore_black = wrapper('30')      # 黑色

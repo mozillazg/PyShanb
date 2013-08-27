@@ -5,3 +5,5 @@ dist
 pyshanb.egg-info
 .env
 *~
+docs/_build
+pyshanb/tests/__pycache__

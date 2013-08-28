@@ -38,7 +38,7 @@ class Lciba(object):
         if query_r.ok:
             return query_r.text
         else:
-            return None
+            return
 
     def get_data(self, word):
         """获取单词简明释义
@@ -49,7 +49,7 @@ class Lciba(object):
         datas = [None] * 4
         html = self.__query(word)
         if not html:
-            return None
+            return
 
         # 音节划分
         if self.syllable:
@@ -65,7 +65,7 @@ class Lciba(object):
                             """)
         pos = re_pos.findall(html)
         if not pos:
-            return None
+            return
 
         # 单词简单释义
         lsts = []  # 存储全部单词释义
@@ -93,7 +93,7 @@ class Lciba(object):
         if syllable:
             return syllable[0].replace(u'▪', u'·')
         else:
-            return None
+            return
 
     def __get_audio(self, html):
         """获取单词发音文件
@@ -102,12 +102,12 @@ class Lciba(object):
                              <div\s+class="simple"[^>]*>''')
         div = re_div.findall(html)
         if not div:
-            return None
+            return
 
         re_audio = re.compile(ur"asplay\('([^']+)'\)")
         audios = re_audio.findall(div[0])
         if not audios:
-            return None
+            return
         if len(audios) < 2 or self.lang == 'en-UK':
             return audios[0]
         else:
@@ -120,12 +120,12 @@ class Lciba(object):
                             [\s\S]+?</ul>\s*</div>''')
         div = re_div.findall(html)
         if not div:
-            return None
+            return
 
         re_li = re.compile(ur'<li>(\S+)\s*<a\s*[^>]+>\W*(\w+)\W*</a>\s*</li>')
         lis = re_li.findall(div[0])
         if not lis:
-            return None
+            return
         result = ''
         for a, b in lis:
             result += a + b + ' '

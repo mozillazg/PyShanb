@@ -34,7 +34,7 @@ def download_audio(url_audio, headers, host=None, cookies=None, referer=None):
     r_audio = requests.get(url_audio, headers=headers_d, cookies=cookies,
                            stream=True)
     if not r_audio.ok:
-        return None
+        return
     else:
         return r_audio.content
 

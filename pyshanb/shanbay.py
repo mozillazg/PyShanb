@@ -69,7 +69,7 @@ class Shanbay(object):
         r_get = requests.get(ur_get, headers=self.headers,
                              cookies=self.cookies, stream=True)
         if not r_get.ok:
-            return None
+            return
 
         # 更新 cookies
         self.cookies.update(r_get.cookies.get_dict())
@@ -82,7 +82,7 @@ class Shanbay(object):
         r_add = requests.get(url_add, headers=self.headers,
                              cookies=self.cookies, stream=True)
         if not r_add.ok:
-            return None
+            return
 
         self.cookies.update(r_add.cookies.get_dict())
         return r_add.json()
@@ -94,12 +94,12 @@ class Shanbay(object):
         r_example = requests.get(url_example, headers=self.headers,
                                  cookies=self.cookies, stream=True)
         if not r_example.ok:
-            return None
+            return
 
         example_json = r_example.json()
         # 判断是否包含例句信息
         if not example_json.get('examples_status'):
-            return None
+            return
 
         self.cookies.update(r_example.cookies.get_dict())
         return example_json
@@ -110,12 +110,12 @@ class Shanbay(object):
         r_user = requests.get(api, headers=self.headers,
                               cookies=self.cookies, stream=True)
         if not r_user.ok:
-            return None
+            return
 
         user_json = r_user.json()
         # 判断是否包含例句信息
         if not user_json.get('result'):
-            return None
+            return
 
         self.cookies.update(r_user.cookies.get_dict())
         return user_json
@@ -127,7 +127,7 @@ class Shanbay(object):
         r_add = requests.get(url_add, headers=self.headers,
                              cookies=self.cookies, stream=True)
         if not r_add.ok:
-            return None
+            return
 
         self.cookies.update(r_add.cookies.get_dict())
         return r_add.json()

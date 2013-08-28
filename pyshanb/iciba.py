@@ -35,7 +35,7 @@ class Lciba(object):
 
         query_r = requests.get(query_url, headers=query_headers,
                                cookies=None, stream=True)
-        if query_r.status_code == requests.codes.ok:
+        if query_r.ok:
             return query_r.text
         else:
             return None

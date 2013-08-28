@@ -33,7 +33,7 @@ def download_audio(url_audio, headers, host=None, cookies=None, referer=None):
     })
     r_audio = requests.get(url_audio, headers=headers_d, cookies=cookies,
                            stream=True)
-    if r_audio.status_code != requests.codes.ok:
+    if not r_audio.ok:
         return None
     else:
         return r_audio.content
@@ -145,7 +145,8 @@ def main():
             if any(iciba_info):
                 cmd_width_icb = 30
                 print '\n' + 'iciba.com- %s --begin'.center(
-                    cmd_width_icb, '-') % color(word, colour, effect='underline')
+                    cmd_width_icb, '-') % color(word, colour,
+                                                effect='underline')
                 if iciba_syllable:
                     print u'音节划分：%s' % iciba_syllable
                 if iciba_def:

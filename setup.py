@@ -18,7 +18,8 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 requirements = [
-    'requests>=1.1.0'
+    'requests>=1.1.0',
+    'beautifulsoup4',
 ]
 
 if sys.version_info[:2] < (2, 7):

@@ -111,5 +111,6 @@ def parse_settings():
     settings['iciba_extra'] = conf.enable_icb_syllable
 
     settings['colour'] = options.colour
+    settings['plugins'] = options.plugins
 
     return storage(settings)

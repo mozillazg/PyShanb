@@ -17,6 +17,7 @@ import requests
 from pyshanb.shanbay import Shanbay, LoginException
 from pyshanb.utils import parse_settings
 from pyshanb.color import color
+from pyshanb.plugin import plugins_output
 
 
 def download_audio(url_audio, headers, host=None, cookies=None, referer=None):
@@ -181,6 +182,9 @@ def main():
                 # print os.path.exists(temp_file)
         except:
             pass
+
+        # 插件
+        plugins_output(settings.plugins, word)
 
         # 例句
         examples = []

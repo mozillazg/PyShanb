@@ -24,7 +24,7 @@ class Shanbay(object):
         r_first_vist = requests.get(url_login, headers=headers,
                                     stream=True)
         # 判断 HTTP 状态码是否是 200
-        if r_first_vist.status_code != requests.codes.ok:
+        if not r_first_vist.ok:
             raise LoginException
         # 获取 cookies 信息
         cookies_first_vist = r_first_vist.cookies.get_dict()
@@ -68,8 +68,8 @@ class Shanbay(object):
         ur_get = api % word
         r_get = requests.get(ur_get, headers=self.headers,
                              cookies=self.cookies, stream=True)
-        if r_get.status_code != requests.codes.ok:
-            return None
+        if not r_get.ok:
+            return
 
         # 更新 cookies
         self.cookies.update(r_get.cookies.get_dict())
@@ -81,8 +81,8 @@ class Shanbay(object):
         url_add = api % word
         r_add = requests.get(url_add, headers=self.headers,
                              cookies=self.cookies, stream=True)
-        if r_add.status_code != requests.codes.ok:
-            return None
+        if not r_add.ok:
+            return
 
         self.cookies.update(r_add.cookies.get_dict())
         return r_add.json()
@@ -93,13 +93,13 @@ class Shanbay(object):
         url_example = api % str(learning_id)
         r_example = requests.get(url_example, headers=self.headers,
                                  cookies=self.cookies, stream=True)
-        if r_example.status_code != requests.codes.ok:
-            return None
+        if not r_example.ok:
+            return
 
         example_json = r_example.json()
         # 判断是否包含例句信息
         if not example_json.get('examples_status'):
-            return None
+            return
 
         self.cookies.update(r_example.cookies.get_dict())
         return example_json
@@ -109,13 +109,13 @@ class Shanbay(object):
         """
         r_user = requests.get(api, headers=self.headers,
                               cookies=self.cookies, stream=True)
-        if r_user.status_code != requests.codes.ok:
-            return None
+        if not r_user.ok:
+            return
 
         user_json = r_user.json()
         # 判断是否包含例句信息
         if not user_json.get('result'):
-            return None
+            return
 
         self.cookies.update(r_user.cookies.get_dict())
         return user_json
@@ -126,8 +126,8 @@ class Shanbay(object):
         url_add = api % (learning_id, sentence, translation)
         r_add = requests.get(url_add, headers=self.headers,
                              cookies=self.cookies, stream=True)
-        if r_add.status_code != requests.codes.ok:
-            return None
+        if not r_add.ok:
+            return
 
         self.cookies.update(r_add.cookies.get_dict())
         return r_add.json()

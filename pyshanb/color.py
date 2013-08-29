@@ -6,14 +6,12 @@
 import sys
 reload(sys)
 sys.setdefaultencoding(sys.stdout.encoding)
-import os
-if os.name == 'nt':
+
+from pyshanb.helper import windows
+
+if windows:
     from colorama import init
     init()
-    win = True
-else:
-    win = False
-
 
 COLORS = ('black', 'white', 'red', 'green', 'yellow', 'blue',
           'magenta', 'cyan', 'gray')
@@ -25,24 +23,24 @@ def wrapper(code):
     code = str(code)
     return '\033[{code}m'.format(**locals())
 
-default = wrapper('0')
-bold = wrapper('1')
-underline = wrapper('4')
-blink = wrapper('5')
-reverse = wrapper('7')
-hidden = wrapper('8')
+default = wrapper('0')    # 默认效果
+bold = wrapper('1')       # 粗体
+underline = wrapper('4')  # 下划线
+blink = wrapper('5')      # 闪烁
+reverse = wrapper('7')    # 调换前景色和背景色
+hidden = wrapper('8')     # 隐藏
 
 # 前景色
-fore_black = wrapper('30')
-fore_red = wrapper('1;31')
-fore_green = wrapper('1;32')
-fore_yellow = wrapper('1;33')
-fore_blue = wrapper('1;34')
-fore_magenta = wrapper('1;35')
-fore_cyan = wrapper('1;36')
-fore_gray = wrapper('37')
-fore_white = wrapper('1;37')
-fore_default = wrapper('39')
+fore_black = wrapper('30')      # 黑色
+fore_red = wrapper('1;31')      # 红色
+fore_green = wrapper('1;32')    # 绿色
+fore_yellow = wrapper('1;33')   # 黄色
+fore_blue = wrapper('1;34')     # 蓝色
+fore_magenta = wrapper('1;35')  # 品红/紫红
+fore_cyan = wrapper('1;36')     # 青色/蓝绿
+fore_gray = wrapper('37')       # 灰色
+fore_white = wrapper('1;37')    # 白色
+fore_default = wrapper('39')    # 默认色
 
 # 背景色
 back_black = wrapper('40')
@@ -69,22 +67,25 @@ def color(text, foreground=None, background=None, effect=None):
     backg_color = ''
     extra_effects = []
 
-    if foreground:
-        foreground = foreground.lower()
-        if foreground in COLORS:
-            foreg_color = globals()['fore_' + foreground]
-    if background:
-        background = background.lower()
-        if background in COLORS:
-            backg_color = globals()['back_' + background]
+    if foreground and foreground.lower() in COLORS:
+        foreg_color = globals()['fore_' + foreground.lower()]
+    if background and background.lower() in COLORS:
+        backg_color = globals()['back_' + background.lower()]
     if effect:
-        effect = effect.lower()
-        effects = [x.strip() for x in effect.split(',')]
+        effects = [x.strip() for x in effect.lower().split(',')]
         for x in effects:
             if x in EFFECTS:
                 # windows 下只支持 bold
-                if win and x != 'bold':
+                if windows and x != 'bold':
                     continue
                 extra_effects.append(globals()[x])
     codes = foreg_color + backg_color + ''.join(extra_effects)
     return codes + text + default
+
+
+if __name__ == '__main__':
+    print color('hello')
+    print color('hello', 'red')
+    print color('hello', 'red', 'white')
+    print color('hello', 'red', 'white', 'blink')
+    print color('hello', 'red', 'white', 'bold')

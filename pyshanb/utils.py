@@ -7,8 +7,8 @@
 import os
 from getpass import getpass
 
-from cmdoption import CmdOption
-from conf import Settings
+from pyshanb.cmdoption import CmdOption
+from pyshanb.conf import Settings
 
 
 # Modified from https://github.com/webpy/webpy/blob/master/web/utils.py
@@ -111,5 +111,6 @@ def parse_settings():
     settings['iciba_extra'] = conf.enable_icb_syllable
 
     settings['colour'] = options.colour
+    settings['plugins'] = options.plugins
 
     return storage(settings)

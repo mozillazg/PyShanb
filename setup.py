@@ -3,8 +3,10 @@
 
 import os
 import sys
+from shutil import copy
 
 import pyshanb
+from pyshanb.helper import windows, home, default_configfile
 
 try:
     from setuptools import setup
@@ -16,16 +18,24 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 requirements = [
-    'requests>=1.1.0'
+    'requests>=1.1.0',
+    'beautifulsoup4',
 ]
 
 if sys.version_info[:2] < (2, 7):
     requirements.append('argparse')
-if sys.platform == 'win32':
+
+if windows:
     requirements.extend(['mp3play', 'colorama'])
+
+# copy setting file to home directory.
+current_dir = os.path.dirname(os.path.realpath(__file__))
+if not os.path.exists(default_configfile):
+    copy(os.path.join(current_dir, 'pyshanb.conf'), home)
 
 packages = [
     'pyshanb',
+    'pyshanb.plugins',
 ]
 
 
@@ -44,7 +54,7 @@ setup(
     author_email='mozillazg101@gmail.com',
     license=pyshanb.__license__,
     packages=packages,
-    package_data={'': ['LICENSE.txt'], 'pyshanb': ['*.conf']},
+    package_data={'': ['LICENSE.txt', '*.conf']},
     package_dir={'pyshanb': 'pyshanb'},
     include_package_data=True,
     install_requires=requirements,

@@ -1,1 +1,1 @@
-include README.rst LICENSE.txt CHANGELOG.rst requirements.txt pyshanb/pyshanb.conf
+include README.rst LICENSE.txt CHANGELOG.rst requirements.txt optionals.txt pyshanb.conf

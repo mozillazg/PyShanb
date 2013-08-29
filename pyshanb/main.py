@@ -14,10 +14,10 @@ import time
 
 import requests
 
-from shanbay import Shanbay
-from shanbay import LoginException
-from utils import parse_settings
-from color import color
+from pyshanb.shanbay import Shanbay, LoginException
+from pyshanb.utils import parse_settings
+from pyshanb.color import color
+from pyshanb.plugin import plugins_output
 
 
 def download_audio(url_audio, headers, host=None, cookies=None, referer=None):
@@ -33,8 +33,8 @@ def download_audio(url_audio, headers, host=None, cookies=None, referer=None):
     })
     r_audio = requests.get(url_audio, headers=headers_d, cookies=cookies,
                            stream=True)
-    if r_audio.status_code != requests.codes.ok:
-        return None
+    if not r_audio.ok:
+        return
     else:
         return r_audio.content
 
@@ -45,9 +45,9 @@ def check_error(func):
         try:
             return func(*args, **kwargs)
         except LoginException:
-            sys.exit(color('Login failed!', 'red', effect='blink'))
+            sys.exit(color('Login failed!', 'red', effect='underline'))
         except requests.exceptions.RequestException:
-            sys.exit(color('Network trouble!', 'red', effect='blink'))
+            sys.exit(color('Network trouble!', 'red', effect='underline'))
     return check
 
 
@@ -55,7 +55,7 @@ def check_error(func):
 def main():
     if sys.version_info[0] == 3:
         sys.exit(color("Sorry, this program doesn't support Python 3 yet",
-                       'red', effect='blink'))
+                       'red', effect='underline'))
     settings = parse_settings()
     colour = settings.colour
 
@@ -124,7 +124,7 @@ def main():
 
         # print '%s [%s]' % (word, pron)
         print ' %s '.center(cmd_width, '-') % color(word, colour,
-                                                    effect='blink')
+                                                    effect='underline')
         print '%s' % cn_definition.strip()
 
         if settings.en_definition and en_definition:
@@ -145,7 +145,8 @@ def main():
             if any(iciba_info):
                 cmd_width_icb = 30
                 print '\n' + 'iciba.com- %s --begin'.center(
-                    cmd_width_icb, '-') % color(word, colour, effect='blink')
+                    cmd_width_icb, '-') % color(word, colour,
+                                                effect='underline')
                 if iciba_syllable:
                     print u'音节划分：%s' % iciba_syllable
                 if iciba_def:
@@ -181,6 +182,9 @@ def main():
                 # print os.path.exists(temp_file)
         except:
             pass
+
+        # 插件
+        plugins_output(settings.plugins, word)
 
         # 例句
         examples = []

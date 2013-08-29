@@ -6,6 +6,11 @@ PyShanb：命令行下的扇贝词典
 基于 `扇贝网 API v0.8 <http://www.shanbay.com/support/dev/api.html>`__
 开发的一个命令行下的查词工具。
 
+文档
+----
+
+`<http://pyshanb.readthedocs.org/>`__
+
 功能
 ----
 
@@ -22,6 +27,7 @@ PyShanb：命令行下的扇贝词典
 -  登录后显示用户昵称;
 -  添加单词例句（可选，默认启用）;
 -  高亮单词及错误信息。
+-  插件功能
 
 
 安装使用
@@ -39,7 +45,9 @@ PyShanb：命令行下的扇贝词典
 
     >shanbay --hlep
     usage: shanbay-script.py [-h] [-V] [-s SETTINGS] [-u USERNAME] [-p PASSWORD]
-                         [-e | -E] [-i | -I] [-a | -A] [--color COLOR]
+                             [-e | -E] [-i | -I] [-a | -A]
+                             [--color {black,white,red,green,yellow,blue,magenta,cyan,gray}]
+                             [--plugin {youdao}]
 
     An command line tool for shanbay.com.
 
@@ -58,16 +66,16 @@ PyShanb：命令行下的扇贝词典
       -I                    disable "Get data from iciba.com" feature
       -a                    enable "Auto play audio" feature
       -A                    disable "Auto play audio" feature
-      --color COLOR         colorize keyword (default: green). COLOR may be
-                            "black", "white", "red", "green", "yellow", "blue",
-                            "magenta", "cyan", or "gray"
+      --color {black,white,red,green,yellow,blue,magenta,cyan,gray}
+                            colorize keyword (default: green)
+      --plugin {youdao}     enable plugin
 
 .. |Build| image:: https://api.travis-ci.org/mozillazg/PyShanb.png?branch=master
    :target: http://travis-ci.org/mozillazg/PyShanb
 .. |Pypi version| image:: https://pypip.in/v/pyshanb/badge.png
-   :target: https://crate.io/package/pyshanb
+   :target: https://crate.io/packages/pyshanb
 .. |Pypi downloads| image:: https://pypip.in/d/pyshanb/badge.png
-   :target: https://crate.io/package/pyshanb
+   :target: https://crate.io/packages/pyshanb
 
 
 License

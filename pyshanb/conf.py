@@ -5,10 +5,13 @@ import ConfigParser
 import os
 import sys
 
+from pyshanb.helper import default_configfile
+
 
 class Settings(object):
-    def __init__(self, configfile='pyshanb.conf',
-                 username=None, password=None):
+    def __init__(self, configfile=None, username=None, password=None):
+        if configfile is None:
+            configfile = default_configfile
         self.config_file = configfile  # 配置文件名称
         self.configs = ConfigParser.RawConfigParser()
         # 读取配置文件。
@@ -72,7 +75,7 @@ class Settings(object):
                 a = u'\nPlease configure your username and/or password,\n'
                 b = 'or command line option, like below:\n'
                 b += '    shanbay -u username -p password\n'
-                b += '    python pyshanb.py -u username -p password\n'
+                b += '    python main.py -u username -p password\n'
                 sys.exit(u'%sby edit config file:\n    %s\n%s'
                          % (a, os.path.realpath(CONFIGFILE), b))
 

@@ -7,8 +7,9 @@
 
 from argparse import ArgumentParser
 
-from .__init__ import __version__
-from .helper import default_configfile
+from pyshanb.__init__ import __version__
+from pyshanb.helper import default_configfile
+from pyshanb.plugin import find_all_plugins_name
 
 
 class CmdOption(object):
@@ -59,6 +60,10 @@ class CmdOption(object):
                                           'gray'],
                                  help='colorize keyword (default: green)')
 
+        self.parser.add_argument('--plugin', dest='plugins', default=[],
+                                 action='append', help='enable plugin',
+                                 choices=find_all_plugins_name())
+
         self.options = self.parser.parse_args()
 
 
@@ -71,6 +76,7 @@ def main():
     print 'enable_iciba: ', options.enable_iciba
     print 'auto_play: ', options.auto_play
     print 'color: ', options.colour
+    print 'plugins: ', options.plugins
 
 if __name__ == '__main__':
     main()

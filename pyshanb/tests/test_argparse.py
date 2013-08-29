@@ -19,6 +19,7 @@ def test_default():
     assert options.enable_iciba is None
     assert options.auto_play is None
     assert options.colour == 'green'
+    assert options.plugins == []
 
 
 def test_args_true():
@@ -39,3 +40,8 @@ def test_args_false():
     assert not options.ask_add_example
     assert not options.enable_iciba
     assert not options.auto_play
+
+
+def test_args_plugin():
+    options = parser.parse_args(['--plugin', 'youdao'])
+    assert options.plugins == ['youdao']

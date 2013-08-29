@@ -6,6 +6,11 @@ PyShanb：命令行下的扇贝词典
 基于 `扇贝网 API v0.8 <http://www.shanbay.com/support/dev/api.html>`__
 开发的一个命令行下的查词工具。
 
+文档
+----
+
+`<http://pyshanb.readthedocs.org/>`__
+
 功能
 ----
 
@@ -22,6 +27,7 @@ PyShanb：命令行下的扇贝词典
 -  登录后显示用户昵称;
 -  添加单词例句（可选，默认启用）;
 -  高亮单词及错误信息。
+-  插件功能
 
 .. |Build| image:: https://api.travis-ci.org/mozillazg/PyShanb.png?branch=master
    :target: http://travis-ci.org/mozillazg/PyShanb

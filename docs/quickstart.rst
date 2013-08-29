@@ -13,7 +13,9 @@
 
     >shanbay --hlep
     usage: shanbay-script.py [-h] [-V] [-s SETTINGS] [-u USERNAME] [-p PASSWORD]
-                         [-e | -E] [-i | -I] [-a | -A] [--color COLOR]
+                             [-e | -E] [-i | -I] [-a | -A]
+                             [--color {black,white,red,green,yellow,blue,magenta,cyan,gray}]
+                             [--plugin {youdao}]
 
     An command line tool for shanbay.com.
 
@@ -32,6 +34,6 @@
       -I                    disable "Get data from iciba.com" feature
       -a                    enable "Auto play audio" feature
       -A                    disable "Auto play audio" feature
-      --color COLOR         colorize keyword (default: green). COLOR may be
-                            "black", "white", "red", "green", "yellow", "blue",
-                            "magenta", "cyan", or "gray"
+      --color {black,white,red,green,yellow,blue,magenta,cyan,gray}
+                            colorize keyword (default: green)
+      --plugin {youdao}     enable plugin

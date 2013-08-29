@@ -13,7 +13,9 @@ Contents:
 
    intro
    quickstart
+   plugin
    screenshot
+   changelog
 
 
 

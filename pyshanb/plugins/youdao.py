@@ -27,8 +27,11 @@ def search(word):
         'User-Agent': (' Mozilla/5.0 (Windows NT 6.2; rv:23.0) Gecko'
                        + '/20100101 Firefox/23.0'),
     }
-    response = requests.get('http://dict.youdao.com/search?q=%s' % quote(word),
-                            headers=headers)
+    try:
+        response = requests.get('http://dict.youdao.com/search?q=%s'
+                                % quote(word), headers=headers)
+    except:
+        return
     if not response.ok:
         return
     html = response.text
@@ -58,6 +61,8 @@ def search(word):
 
 def output(word, colour='green'):
     trans = search(word)
+    if not trans:
+        return
     word_color = color(word, colour, effect='underline')
     print '\n' + 'youdao.com- %s --begin'.center(40, '-') % word_color
     for tran in trans:

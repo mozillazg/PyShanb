@@ -14,7 +14,10 @@ def plugins_output(plugins, word):
     for plugin in plugins:
         if plugin in all_plugins:
             plugin = import_string('pyshanb.plugins.' + plugin, silent=True)
-            plugin.output(word)
+            try:
+                plugin.output(word)
+            except:
+                pass
 
 
 if __name__ == '__main__':

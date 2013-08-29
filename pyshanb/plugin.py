@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from ._werkzeug import import_string, find_modules
+from pyshanb._werkzeug import import_string, find_modules
 
 
 def find_all_plugins_name():

@@ -5,7 +5,7 @@ import ConfigParser
 import os
 import sys
 
-from .helper import default_configfile
+from pyshanb.helper import default_configfile
 
 
 class Settings(object):
@@ -75,7 +75,7 @@ class Settings(object):
                 a = u'\nPlease configure your username and/or password,\n'
                 b = 'or command line option, like below:\n'
                 b += '    shanbay -u username -p password\n'
-                b += '    python pyshanb.py -u username -p password\n'
+                b += '    python main.py -u username -p password\n'
                 sys.exit(u'%sby edit config file:\n    %s\n%s'
                          % (a, os.path.realpath(CONFIGFILE), b))
 

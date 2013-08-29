@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-"""The main entry point. Invoke as `shanbay' or `python -m pyshanb'.
+"""The main entry point. Invoke as `shanbay'.
 
 """
 import sys
-from .pyshanb import main
+from .main import main
 
 
 if __name__ == '__main__':

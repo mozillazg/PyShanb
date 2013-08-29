@@ -7,8 +7,8 @@
 
 from argparse import ArgumentParser
 
-from __init__ import __version__
-from helper import default_configfile
+from .__init__ import __version__
+from .helper import default_configfile
 
 
 class CmdOption(object):

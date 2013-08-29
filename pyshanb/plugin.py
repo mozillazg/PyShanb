@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from werkzeug import import_string, find_modules
+from ._werkzeug import import_string, find_modules
 
 
 def find_all_plugins_name():
@@ -13,7 +13,7 @@ def plugins_output(plugins, word):
     all_plugins = find_all_plugins_name()
     for plugin in plugins:
         if plugin in all_plugins:
-            plugin = import_string('plugins.' + plugin, silent=True)
+            plugin = import_string('pyshanb.plugins.' + plugin, silent=True)
             plugin.output(word)
 
 

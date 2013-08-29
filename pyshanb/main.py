@@ -14,10 +14,9 @@ import time
 
 import requests
 
-from shanbay import Shanbay
-from shanbay import LoginException
-from utils import parse_settings
-from color import color
+from .shanbay import Shanbay, LoginException
+from .utils import parse_settings
+from .color import color
 
 
 def download_audio(url_audio, headers, host=None, cookies=None, referer=None):

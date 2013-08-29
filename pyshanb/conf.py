@@ -5,13 +5,13 @@ import ConfigParser
 import os
 import sys
 
-import utils
+from .helper import default_configfile
 
 
 class Settings(object):
     def __init__(self, configfile=None, username=None, password=None):
         if configfile is None:
-            configfile = utils.default_configfile
+            configfile = default_configfile
         self.config_file = configfile  # 配置文件名称
         self.configs = ConfigParser.RawConfigParser()
         # 读取配置文件。

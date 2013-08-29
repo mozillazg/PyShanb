@@ -35,6 +35,7 @@ if not os.path.exists(default_configfile):
 
 packages = [
     'pyshanb',
+    'pyshanb.plugins',
 ]
 
 

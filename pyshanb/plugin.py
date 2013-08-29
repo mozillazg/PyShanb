@@ -5,7 +5,7 @@ from werkzeug import import_string, find_modules
 
 
 def find_all_plugins_name():
-    modules = find_modules('plugins', silent=True)
+    modules = find_modules('pyshanb.plugins', silent=True)
     return [x.split('.')[-1] for x in modules]
 
 

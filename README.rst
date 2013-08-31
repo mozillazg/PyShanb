@@ -48,6 +48,7 @@ PyShanb：命令行下的扇贝词典
                              [-e | -E] [-i | -I] [-a | -A]
                              [--color {black,white,red,green,yellow,blue,magenta,cyan,gray}]
                              [--plugin {youdao}]
+                             [--enable-example | --disable-example]
 
     An command line tool for shanbay.com.
 
@@ -69,6 +70,8 @@ PyShanb：命令行下的扇贝词典
       --color {black,white,red,green,yellow,blue,magenta,cyan,gray}
                             colorize keyword (default: green)
       --plugin {youdao}     enable plugin
+      --enable-example      enable examples
+      --disable-example     disable examples
 
 .. |Build| image:: https://api.travis-ci.org/mozillazg/PyShanb.png?branch=master
    :target: http://travis-ci.org/mozillazg/PyShanb

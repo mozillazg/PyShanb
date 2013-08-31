@@ -64,6 +64,14 @@ class CmdOption(object):
                                  action='append', help='enable plugin',
                                  choices=find_all_plugins_name())
 
+        group_ex = self.parser.add_mutually_exclusive_group()
+        group_ex.add_argument('--enable-example', action='store_true',
+                              dest='example', help='enable examples',
+                              default=None)
+        group_ex.add_argument('--disable-example', action='store_false',
+                              dest='example', help='disable examples',
+                              default=None)
+
         self.options = self.parser.parse_args()
 
 
@@ -77,6 +85,7 @@ def main():
     print 'auto_play: ', options.auto_play
     print 'color: ', options.colour
     print 'plugins: ', options.plugins
+    print 'example: ', options.example
 
 if __name__ == '__main__':
     main()

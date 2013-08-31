@@ -5,8 +5,8 @@ PyShanb Changelog
 0.6.1 (2013-xx-yy)
 ------------------
 
--- 修复 0.6 忘了添加 html5lib 依赖；
--- 添加 ``[--enable-example | --disable-example]`` 命令行选项控制是否输出单词例句。
+-  修复 0.6 忘了添加 html5lib 依赖；
+-  添加 ``[--enable-example | --disable-example]`` 命令行选项控制是否输出单词例句。
 
 
 0.6 (2013-08-29)

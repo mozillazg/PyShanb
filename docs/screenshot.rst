@@ -25,6 +25,10 @@
 
 \..
 
+.. image :: _static/pyshanb-07.png
+
+\..
+
 .. image :: _static/pyshanb-03.png
 
 \..

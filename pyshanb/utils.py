@@ -63,6 +63,7 @@ def parse_settings():
     ask_add_example = options.ask_add_example
     enable_iciba = options.enable_iciba
     auto_play = options.auto_play
+    example = options.example
 
     # 读取配置文件
     if configfile:
@@ -89,7 +90,6 @@ def parse_settings():
     settings['ask_add'] = conf.ask_add  # 询问是否保存单词
     settings['auto_play'] = auto_play
     settings['en_definition'] = conf.enable_en_definition  # 单词英文释义
-    settings['example'] = conf.enable_example  # 用户自己添加的单词例句
     settings['url_login'] = site + conf.url_login
     settings['api_get_word'] = site + conf.api_get_word  # 获取单词信息的 api
     settings['api_get_example'] = site + conf.api_get_example  # 获取例句的 api
@@ -100,6 +100,9 @@ def parse_settings():
     if ask_add_example is None:
         ask_add_example = conf.ask_add_example  # 询问是否添加例句
     settings['ask_example'] = ask_add_example
+    if example is None:
+        example = conf.enable_example
+    settings['example'] = example  # 用户自己添加的单词例句
 
     # iciba.com
     if enable_iciba is None:

@@ -20,6 +20,7 @@ if sys.argv[-1] == 'publish':
 requirements = [
     'requests>=1.1.0',
     'beautifulsoup4',
+    'html5lib',
 ]
 
 if sys.version_info[:2] < (2, 7):

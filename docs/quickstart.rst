@@ -16,6 +16,7 @@
                              [-e | -E] [-i | -I] [-a | -A]
                              [--color {black,white,red,green,yellow,blue,magenta,cyan,gray}]
                              [--plugin {youdao}]
+                             [--enable-example | --disable-example]
 
     An command line tool for shanbay.com.
 
@@ -37,3 +38,5 @@
       --color {black,white,red,green,yellow,blue,magenta,cyan,gray}
                             colorize keyword (default: green)
       --plugin {youdao}     enable plugin
+      --enable-example      enable examples
+      --disable-example     disable examples

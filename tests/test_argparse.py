@@ -20,12 +20,13 @@ def test_default():
     assert options.auto_play is None
     assert options.colour == 'green'
     assert options.plugins == []
+    assert options.example is None
 
 
 def test_args_true():
     options = parser.parse_args(['-s', 'foobar.conf', '-u', 'foo',
                                  '-p', 'bar', '-e', '-i', '-a', '--color',
-                                 'red'])
+                                 'red', '--enable-example'])
     assert options.settings == 'foobar.conf'
     assert options.username == 'foo'
     assert options.password == 'bar'
@@ -33,13 +34,15 @@ def test_args_true():
     assert options.enable_iciba
     assert options.auto_play
     assert options.colour == 'red'
+    assert options.example
 
 
 def test_args_false():
-    options = parser.parse_args(['-E', '-I', '-A'])
+    options = parser.parse_args(['-E', '-I', '-A', '--disable-example'])
     assert not options.ask_add_example
     assert not options.enable_iciba
     assert not options.auto_play
+    assert not options.example
 
 
 def test_args_plugin():

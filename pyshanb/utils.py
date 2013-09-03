@@ -7,8 +7,8 @@
 import os
 from getpass import getpass
 
-from pyshanb.cmdoption import CmdOption
-from pyshanb.conf import Settings
+from .cmdoption import CmdOption
+from .conf import Settings
 
 
 # Modified from https://github.com/webpy/webpy/blob/master/web/utils.py

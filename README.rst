@@ -33,8 +33,18 @@ PyShanb：命令行下的扇贝词典
 安装使用
 --------
 
+Windows
+~~~~~~~
+
+1. 下载 `shanbay.0.6.1.exe <https://github.com/mozillazg/PyShanb/raw/exe/bin/shanbay.0.6.1.exe>`__ ;
+2. 命令行下执行：\ ``shanbay.0.6.1.exe -u username -p password``
+
+
+其他平台/开发者
+~~~~~~~~~~~~~~~
+
 1. ``pip install pyshanb`` ；
-2. 命令行下执行：\ ``shanbay -u username``\ （Tips：使用过程中输入 ``q``
+2. 命令行下执行：\ ``shanbay -u username -p password``\ （Tips：使用过程中输入 ``q``
    即可退出程序）。
 
 
@@ -85,3 +95,5 @@ License
 -------
 
 Licensed under the `MIT License <http://en.wikipedia.org/wiki/MIT_License>`__.
+
+.. `shanbay.ico` 版权归 `扇贝网 <http://www.shanbay.com>`__.

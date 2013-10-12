@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from pyshanb._werkzeug import import_string, find_modules
+from ._werkzeug import import_string, find_modules
 
 
 def find_all_plugins_name():
@@ -18,8 +18,3 @@ def plugins_output(plugins, word):
                 plugin.output(word)
             except:
                 pass
-
-
-if __name__ == '__main__':
-    print find_all_plugins_name()
-    plugins_output(['youdao'], 'hello')

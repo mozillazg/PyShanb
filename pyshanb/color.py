@@ -7,7 +7,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding(sys.stdout.encoding)
 
-from pyshanb.helper import windows
+from .helper import windows
 
 if windows:
     from colorama import init

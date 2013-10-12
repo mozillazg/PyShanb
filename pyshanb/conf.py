@@ -5,7 +5,7 @@ import ConfigParser
 import os
 import sys
 
-from pyshanb.helper import default_configfile
+from .helper import default_configfile
 
 
 class Settings(object):

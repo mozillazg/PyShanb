@@ -14,10 +14,10 @@ import time
 
 import requests
 
-from pyshanb.shanbay import Shanbay, LoginException
-from pyshanb.utils import parse_settings
-from pyshanb.color import color
-from pyshanb.plugin import plugins_output
+from .shanbay import Shanbay, LoginException
+from .utils import parse_settings
+from .color import color
+from .plugin import plugins_output
 
 
 def download_audio(url_audio, headers, host=None, cookies=None, referer=None):

@@ -7,3 +7,4 @@ pyshanb.egg-info
 *~
 docs/_build
 pyshanb/tests/__pycache__
+build

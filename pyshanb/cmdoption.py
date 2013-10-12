@@ -7,9 +7,9 @@
 
 from argparse import ArgumentParser
 
-from pyshanb.__init__ import __version__
-from pyshanb.helper import default_configfile
-from pyshanb.plugin import find_all_plugins_name
+from .__init__ import __version__
+from .helper import default_configfile
+from .plugin import find_all_plugins_name
 
 
 class CmdOption(object):

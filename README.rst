@@ -96,4 +96,4 @@ License
 
 Licensed under the `MIT License <http://en.wikipedia.org/wiki/MIT_License>`__.
 
-.. `shanbay.ico` 版权归 `扇贝网 <http://www.shanbay.com>`__.
+图标版权归 `扇贝网 <http://www.shanbay.com>`__ 所有.

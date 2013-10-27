@@ -36,8 +36,8 @@ PyShanb：命令行下的扇贝词典
 Windows
 ~~~~~~~
 
-1. 下载 `shanbay.0.6.1.exe <https://github.com/mozillazg/PyShanb/raw/exe/bin/shanbay.0.6.1.exe>`__ ;
-2. 命令行下执行：\ ``shanbay.0.6.1.exe -u username -p password``
+1. 下载 `shanbay.0.6.2.exe.zip <http://pan.baidu.com/s/1zMRKK>`__ ;
+2. 命令行下执行：\ ``shanbay.0.6.2.exe -u username -p password``
 
 
 其他平台/开发者
@@ -54,11 +54,11 @@ Windows
 ::
 
     >shanbay --hlep
-    usage: shanbay-script.py [-h] [-V] [-s SETTINGS] [-u USERNAME] [-p PASSWORD]
-                             [-e | -E] [-i | -I] [-a | -A]
-                             [--color {black,white,red,green,yellow,blue,magenta,cyan,gray}]
-                             [--plugin {youdao}]
-                             [--enable-example | --disable-example]
+    usage: shanbay.py [-h] [-V] [-s SETTINGS] [-u USERNAME] [-p PASSWORD]
+                      [-e | -E] [-i | -I] [-a | -A]
+                      [--color {black,white,red,green,yellow,blue,magenta,cyan,gray}]
+                      [--plugin {youdao}] [--example | --disable-example]
+                      [--english | --disable-english]
 
     An command line tool for shanbay.com.
 
@@ -71,17 +71,22 @@ Windows
                             the account username of shanbay.com
       -p PASSWORD, --password PASSWORD
                             the account password of shanbay.com
-      -e                    enable "Add example" feature
-      -E                    disable "Add example" feature
-      -i                    enable "Get data from iciba.com" feature
-      -I                    disable "Get data from iciba.com" feature
-      -a                    enable "Auto play audio" feature
-      -A                    disable "Auto play audio" feature
+      -e, --add-example     enable "Add example" feature
+      -E, --disable-add-example
+                            disable "Add example" feature
+      -i, --iciba           enable "Get data from iciba.com" feature
+      -I, --disable-iciba   disable "Get data from iciba.com" feature
+      -a, --auto-play       enable "Auto play audio" feature
+      -A, --disable-auto-play
+                            disable "Auto play audio" feature
       --color {black,white,red,green,yellow,blue,magenta,cyan,gray}
                             colorize keyword (default: green)
       --plugin {youdao}     enable plugin
-      --enable-example      enable examples
+      --example, --enable-example
+                            enable examples
       --disable-example     disable examples
+      --english             enable english definition
+      --disable-english     disable english definition
 
 .. |Build| image:: https://api.travis-ci.org/mozillazg/PyShanb.png?branch=master
    :target: http://travis-ci.org/mozillazg/PyShanb

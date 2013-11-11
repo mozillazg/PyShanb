@@ -1,4 +1,8 @@
-.DEFAULT: exe
+
+help:
+	@echo "exe       make shanbay.exe"
+	@echo "register  register to pypi"
+	@echo "publish   publish to pypi"
 
 exe:
 	@echo "make shanbay.exe"

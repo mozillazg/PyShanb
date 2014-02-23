@@ -51,6 +51,18 @@ def check_error(func):
     return check
 
 
+def encode(unicode_str, encoding=sys.stdout.encoding):
+    return unicode_str.encode(encoding, 'ignore')
+
+
+def decode(string, encoding=sys.stdin.encoding):
+    return string.decode(encoding, 'ignore')
+
+
+def output(msg):
+    print encode(msg)
+
+
 @check_error
 def main():
     if sys.version_info[0] == 3:
@@ -77,11 +89,11 @@ def main():
     }
 
     # 登录
-    print 'Login...'
+    output('Login...')
     shanbay = Shanbay(settings.url_login, headers, settings.username,
                       settings.password)
     user_info = shanbay.get_user_info(settings.api_get_user_info)
-    print 'Welcome! %s.' % color(user_info.get('nickname'), colour)
+    output('Welcome! %s.' % color(user_info.get('nickname'), colour))
 
     while True:
         word = quote(raw_input('Please input an english word: ').strip())
@@ -90,13 +102,13 @@ def main():
 
         # 输入 q 退出程序
         if word == 'q':
-            print 'Goodbye.'
+            output('Goodbye.')
             sys.exit(0)
 
         # 获取单词信息
         info = shanbay.get_word(settings.api_get_word, word)
         if not info:
-            print "%s may not be an english word!" % color(word, colour)
+            output("%s may not be an english word!" % color(word, colour))
             continue
 
         # 输出单词信息
@@ -104,7 +116,7 @@ def main():
         learning_id = info.get('learning_id')
         voc = info.get('voc')
         if not voc:
-            print "%s may not be an english word!" % color(word, colour)
+            output("%s may not be an english word!" % color(word, colour))
             continue
         # 单词本身
         word = voc.get('content')
@@ -122,15 +134,14 @@ def main():
         # 中文解释
         cn_definition = voc.get('definition')
 
-        # print '%s [%s]' % (word, pron)
-        print ' %s '.center(cmd_width, '-') % color(word, colour,
-                                                    effect='underline')
-        print '%s' % cn_definition.strip()
+        output(' %s '.center(cmd_width, '-') % color(word, colour,
+                                                     effect='underline'))
+        output('%s' % cn_definition.strip())
 
         if settings.en_definition and en_definition:
-            print '\nEnglish definition:'
+            output('\nEnglish definition:')
             for en in en_definition:
-                print '%s' % en.strip()
+                output('%s' % en.strip())
 
         # iciba
         if settings.iciba:
@@ -144,21 +155,21 @@ def main():
 
             if any(iciba_info):
                 cmd_width_icb = 30
-                print '\n' + 'iciba.com- %s --begin'.center(
+                output('\n' + 'iciba.com- %s --begin'.center(
                     cmd_width_icb, '-') % color(word, colour,
-                                                effect='underline')
+                                                effect='underline'))
                 if iciba_syllable:
-                    print u'音节划分：%s' % iciba_syllable
+                    output(u'音节划分：%s' % iciba_syllable)
                 if iciba_def:
-                    print '-'
+                    output('-')
                     for x in iciba_def:
-                        print '%s' % x
+                        output('%s' % x)
                 if iciba_extra:
-                    print '-'
-                    print iciba_extra
+                    output('-')
+                    output(iciba_extra)
                 if iciba_audio:
                     audio_url = iciba_audio
-                print 'iciba.com------end'.center(cmd_width_icb, '-')
+                output('iciba.com------end'.center(cmd_width_icb, '-'))
 
         try:
             if settings.auto_play:
@@ -170,7 +181,6 @@ def main():
                 file_name = str(time.time()) + \
                     os.path.splitext(audio_url)[1] or '.mp3'
                 temp_file = os.path.realpath(tempfile.gettempdir() + file_name)
-                # print temp_file
                 audio = download_audio(audio_url, headers, referer=referer)
                 with open(temp_file, 'wb') as f:
                     f.write(audio)
@@ -179,7 +189,6 @@ def main():
                 mp3.play()
                # 移除临时文件
                 os.remove(temp_file)
-                # print os.path.exists(temp_file)
         except:
             pass
 
@@ -203,9 +212,9 @@ def main():
                     )
 
         if examples:
-            print '\nExamples:'
+            output('\nExamples:')
             for ex in examples:
-                print '%s' % ex.strip()
+                output('%s' % ex.strip())
 
         # 如果未收藏该单词
         if not learning_id:
@@ -217,13 +226,14 @@ def main():
                     learning_id_info = shanbay.add_word(settings.api_add_word,
                                                         word)
                     learning_id = learning_id_info.get('id')
-                    print '%s has been added to shanbay.com' % color(word,
-                                                                     colour)
+                    output('%s has been added to shanbay.com' % color(word,
+                                                                      colour))
             elif settings.auto_add:
                 learning_id_info = shanbay.add_word(settings.api_add_word,
                                                     word)
                 learning_id = learning_id_info.get('id')
-                print '%s has been added to shanbay.com' % color(word, colour)
+                output('%s has been added to shanbay.com' % color(word,
+                                                                  colour))
 
         # 添加例句
         if learning_id and settings.ask_example:
@@ -270,11 +280,11 @@ def main():
                                                      quote(sentence),
                                                      quote(translation))
                         if result.get('example_status') == 1:
-                            print 'Add success'
+                            output('Add success')
         else:
             pass
 
-        print '-' * cmd_width
+        output('-' * cmd_width)
 
 if __name__ == '__main__':
     main()

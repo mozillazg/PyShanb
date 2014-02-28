@@ -6,7 +6,7 @@ help:
 
 exe:
 	@echo "make shanbay.exe"
-	"e:\Python27\Scripts\pyinstaller.exe" shanbay.spec
+	pyinstaller shanbay.spec
 
 publish:
 	@echo "publish to pypi"

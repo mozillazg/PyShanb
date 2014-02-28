@@ -1,16 +1,6 @@
 安装使用
 ========
 
-Windows
--------
-
-1. 下载 `shanbay.0.6.2.exe.zip <http://pan.baidu.com/s/1zMRKK>`__ ;
-2. 命令行下执行：\ ``shanbay.0.6.2.exe -u username -p password``
-
-
-其他平台/开发者
----------------
-
 1. ``pip install pyshanb`` ；
 2. 命令行下执行：\ ``shanbay -u username -p password``\ （Tips：使用过程中输入 ``q``
    即可退出程序）。

@@ -8,7 +8,7 @@ pyshanby 支持简单的插件功能。可以通过插件系统输出各类词�
 插件开发
 --------
 
-首先，插件都比方放到 ``pyshanb/plugins/`` 目录下；
+首先，插件都必须放到 ``pyshanb/plugins/`` 目录下；
 
 其次，插件模块中必须包含函数 ``output(word, colour='green')``,
 其中 ``word`` 就是用户输入的单词 。

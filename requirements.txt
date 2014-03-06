@@ -1,4 +1,4 @@
 requests>=1.1.0
-argparse>=1.2.1
+argparse
 beautifulsoup4
 html5lib

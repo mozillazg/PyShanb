@@ -7,4 +7,4 @@ from pyshanb.plugin import find_all_plugins_name
 
 
 def test_plugin():
-    assert find_all_plugins_name() == ['youdao']
+    assert find_all_plugins_name() == ['vocabulary', 'youdao']

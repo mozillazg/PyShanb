@@ -3,8 +3,9 @@
 
 """http://www.vocabulary.com/dictionary/"""
 
-from urllib import quote
 import re
+import textwrap
+from urllib import quote
 
 import requests
 from bs4 import BeautifulSoup
@@ -18,7 +19,7 @@ def clean_text(text):
 
     """
     text = re.sub(r'(?<=\s)\s+', '', text.strip())
-    return re.sub(r'\n', ' ', text)
+    return textwrap.fill(re.sub(r'\n', ' ', text), 79)
 
 
 def search(word):
@@ -53,7 +54,7 @@ def output(word, colour='green'):
         return
     word_color = color(word, colour, effect='underline')
     print '\n' + 'vocabulary.com- %s --begin'.center(40, '-') % word_color
-    print trans
+    print clean_text(trans)
     print 'vocabulary.com------end'.center(45, '-')
 
 if __name__ == '__main__':

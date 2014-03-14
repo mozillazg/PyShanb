@@ -11,6 +11,7 @@ from urllib2 import quote
 import tempfile
 import os
 import time
+import textwrap
 
 import requests
 
@@ -60,7 +61,7 @@ def decode(string, encoding=sys.stdin.encoding):
 
 
 def output(msg):
-    print encode(msg)
+    print textwrap.fill(encode(msg), 79)
 
 
 @check_error

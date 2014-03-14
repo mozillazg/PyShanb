@@ -3,8 +3,9 @@
 
 """有道词典."""
 
-from urllib import quote
 import re
+import textwrap
+from urllib import quote
 
 import requests
 from bs4 import BeautifulSoup
@@ -18,7 +19,7 @@ def clean_text(text):
 
     """
     text = re.sub(r'(?<=\s)\s+', '', text.strip())
-    return re.sub(r'\n', ' ', text)
+    return textwrap.fill(re.sub(r'\n', ' ', text), 79)
 
 
 def search(word):

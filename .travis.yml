@@ -4,16 +4,16 @@ python:
   - "2.7"
 
 install:
-  - "pip install -r requirements.txt --use-mirrors"
-  - "pip install -e . --use-mirrors"
-  #- "pip install nosetests --use-mirrors"
-  #- "pip install python-coveralls --use-mirrors"
+  - "pip install -r requirements.txt"
+  - "pip install -e ."
 
 script:
   - "python -m compileall -f ."
+  - "python setup.py develop"
   - "python setup.py test"
   - "py.test"
-  #- "nosetests"
 
 notifications:
-  email: false
+  email:
+    on_success: change
+    on_failure: always

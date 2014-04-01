@@ -15,7 +15,7 @@ import textwrap
 
 import requests
 
-from .shanbay import Shanbay, LoginException
+from shanbay import Shanbay, AuthException, ServerException
 from .utils import parse_settings
 from .color import color
 from .plugin import plugins_output
@@ -45,9 +45,9 @@ def check_error(func):
     def check(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except LoginException:
+        except AuthException:
             sys.exit(color('Login failed!', 'red', effect='underline'))
-        except requests.exceptions.RequestException:
+        except (requests.exceptions.RequestException, ServerException):
             sys.exit(color('Network trouble!', 'red', effect='underline'))
     return check
 
@@ -86,14 +86,15 @@ def main():
     headers = {
         'Host': urlparse.urlsplit(settings.site).netloc,
         'User-Agent': (' Mozilla/5.0 (Windows NT 6.2; rv:23.0) Gecko'
-                       + '/20100101 Firefox/23.0'),
+                       + '/20100101 Firefox/28.0'),
     }
 
     # 登录
     output('Login...')
-    shanbay = Shanbay(settings.url_login, headers, settings.username,
-                      settings.password)
-    user_info = shanbay.get_user_info(settings.api_get_user_info)
+    s = Shanbay(settings.username, settings.password)
+    s.login()
+    shanbay = s.api
+    user_info = shanbay.user_info()
     output('Welcome! %s.' % color(user_info.get('nickname'), colour))
 
     while True:
@@ -107,7 +108,7 @@ def main():
             sys.exit(0)
 
         # 获取单词信息
-        info = shanbay.get_word(settings.api_get_word, word)
+        info = shanbay.query_word(word)
         if not info:
             output("%s may not be an english word!" % color(word, colour))
             continue
@@ -199,8 +200,7 @@ def main():
         # 例句
         examples = []
         if settings.example and learning_id:
-            examples_info = shanbay.get_example(settings.api_get_example,
-                                                learning_id)
+            examples_info = shanbay.examples(learning_id)
             if examples_info:
                 examples_dict = examples_info.get('examples')
                 for example_dict in examples_dict:
@@ -224,14 +224,12 @@ def main():
                                 ' (y/n): ' % color(word, colour))
                 if ask.strip().lower().startswith('y'):
                     # 收藏单词
-                    learning_id_info = shanbay.add_word(settings.api_add_word,
-                                                        word)
+                    learning_id_info = shanbay.add_word(word)
                     learning_id = learning_id_info.get('id')
                     output('%s has been added to shanbay.com' % color(word,
                                                                       colour))
             elif settings.auto_add:
-                learning_id_info = shanbay.add_word(settings.api_add_word,
-                                                    word)
+                learning_id_info = shanbay.add_word(word)
                 learning_id = learning_id_info.get('id')
                 output('%s has been added to shanbay.com' % color(word,
                                                                   colour))
@@ -270,16 +268,9 @@ def main():
 
                     # 添加例句到扇贝网
                     if sentence and translation:
-                        sentence = sentence.strip()
-                        translation = translation.strip()
-                        encoding = sys.stdin.encoding
-                        translation = translation.decode(encoding)
-                        translation = translation.encode('utf8')
-
-                        result = shanbay.add_example(settings.api_add_example,
-                                                     learning_id,
-                                                     quote(sentence),
-                                                     quote(translation))
+                        sentence = sentence.strip().decode(encoding)
+                        translation = translation.strip().decode(encoding)
+                        result = shanbay.add_example(learning_id, sentence, translation)
                         if result.get('example_status') == 1:
                             output('Add success')
         else:

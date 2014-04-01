@@ -2,3 +2,4 @@ requests>=1.1.0
 argparse
 beautifulsoup4
 html5lib
+shanbay

@@ -21,6 +21,7 @@ requirements = [
     'requests>=1.1.0',
     'beautifulsoup4',
     'html5lib',
+    'shanbay',
 ]
 
 if sys.version_info[:2] < (2, 7):

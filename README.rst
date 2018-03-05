@@ -80,9 +80,9 @@ PyShanb：命令行下的扇贝词典
 
 .. |Build| image:: https://api.travis-ci.org/mozillazg/PyShanb.png?branch=master
    :target: http://travis-ci.org/mozillazg/PyShanb
-.. |Pypi version| image:: https://pypip.in/v/pyshanb/badge.png
+.. |Pypi version| image:: https://img.shields.io/pypi/v/pyshanb.svg
    :target: https://crate.io/packages/pyshanb
-.. |Pypi downloads| image:: https://pypip.in/d/pyshanb/badge.png
+.. |Pypi downloads| image:: https://img.shields.io/pypi/dm/pyshanb.svg
    :target: https://crate.io/packages/pyshanb
 
 
